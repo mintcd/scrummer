@@ -29,8 +29,8 @@ export default function Nav() {
 					<Navbar.Link href="/" active={true}>
 						Design Research
 					</Navbar.Link>
-					<Navbar.Link href="/scrum-values-quiz">
-						Scrum Values Quiz
+					<Navbar.Link href="/scrum-UI">
+						Scrum UI
 					</Navbar.Link>
 				</Navbar.Collapse>
 			</Navbar>
