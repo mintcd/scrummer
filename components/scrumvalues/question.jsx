@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import questions from "@models/data/questions";
+import questions from "../../models/data/questions";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import { faForward, faBackward, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const Question = ({ number, selections, onNext, onBack, onFinish, onChange }) => {
   const question = questions[number]
@@ -55,29 +59,17 @@ const Question = ({ number, selections, onNext, onBack, onFinish, onChange }) =>
           <div className="button-container col-4"></div>}
 
         {number > 0 &&
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href="/quiz"
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Take Quiz
-            </a>
-            <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
-              Explore <span aria-hidden="true">→</span>
-            </a>
+          <div className="button-container col-4">
+            <button className="btn --left" onClick={handleBack}>
+              <FontAwesomeIcon icon={faBackward} />
+            </button>
           </div>}
 
         {number < 4 &&
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href="/quiz"
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Take Quiz
-            </a>
-            <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
-              Explore <span aria-hidden="true">→</span>
-            </a>
+          <div className="button-container col-4">
+            <button className="btn --right" onClick={handleNext}>
+              <FontAwesomeIcon icon={faForward} />
+            </button>
           </div>}
         {number === 4 &&
           <div className="button-container col-4">
