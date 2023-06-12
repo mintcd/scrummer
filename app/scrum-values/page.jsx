@@ -1,7 +1,7 @@
 import Feed from '@components/Feed'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Page() {
   return (
     <section className="home-section">
       <h1 className="head_text text-center">

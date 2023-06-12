@@ -168,3 +168,8 @@
 .flex-between {
   @apply flex justify-between items-center;
 }
+
+/* Shorten semantic classes */
+.home-section{
+  @apply w-full flex-center flex-col
+}
