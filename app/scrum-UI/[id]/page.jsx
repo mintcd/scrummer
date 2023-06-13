@@ -197,7 +197,7 @@ export default function Page({ params }) {
                         <input
                           type="checkbox"
                           class="w-4 h-4 text-orange-300 bg-gray-100 border-gray-300 rounded focus:ring-orange-300 dark:focus:ring-orange-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          check={result[questionNumber][index]}
+                          checked={result[questionNumber][index]}
                         />
                         <label for="default-checkbox"
                           class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
