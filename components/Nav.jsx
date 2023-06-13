@@ -16,10 +16,12 @@ export default function Nav() {
 				rounded={true}
 			>
 				<Navbar.Brand href="/">
-					<img
-						src="assets/images/logo.svg"
-						className="mr-3 h-6 sm:h-9"
+					<Image
+						src="/assets/images/logo.svg"
 						alt="Flowbite Logo"
+						width={24}
+						height={36}
+						className="mr-3 h-6 sm:h-9"
 					/>
 					<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
 					</span>

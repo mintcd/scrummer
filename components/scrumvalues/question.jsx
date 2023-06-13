@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import questions from "../../models/data/questions";
+import questions from "../../models/questions";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '@fortawesome/fontawesome-svg-core/styles.css';

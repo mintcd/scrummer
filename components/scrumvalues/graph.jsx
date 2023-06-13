@@ -9,7 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
-import questions from '../../models/data/questions';
+import questions from '../../models/questions';
 
 ChartJS.register(
   RadialLinearScale,

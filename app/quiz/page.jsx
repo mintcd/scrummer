@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import Question from "@components/scrumvalues/question"
-import Graph from "@components/scrumvalues/graph"
+// import Question from "@components/scrumvalues/question"
+// import Graph from "@components/scrumvalues/graph"
 
 export default function ScrumValuesQuizFacade() {
 
