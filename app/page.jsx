@@ -11,7 +11,7 @@ export default function Home() {
       {/* <p> A paragraph here </p> */}
 
       <Link href="/scrum-UI" className='flex gap-2 flex-center'>
-        <p className='logo_text'> Checkout my new UI </p>
+        <p className='logo_text'> Checkout my new UIs </p>
       </Link>
 
     </section>
