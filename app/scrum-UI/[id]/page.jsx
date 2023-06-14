@@ -76,8 +76,8 @@ export default function Page({ params }) {
   );
 
   const UINavigation = (
-    <div className='flex flex-col items-center py-1'>
-      <p className='py-2'> Or visit other UIs </p>
+    <div className='flex flex-col items-center pt-1 pb-6'>
+      <p className='py-2'> Visit other UIs </p>
       <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
         <a
           href="#"
@@ -143,20 +143,27 @@ export default function Page({ params }) {
     ), {}))
   }
 
+  function scrollToElement(elementName) {
+    const targetElement = document.getElementByName(elementName);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   return (
     <div className='flex flex-col item-center text-center'>
       {params.id == 1 &&
         <div className="bg-white flex flex-col items-center justify-between border-t border-gray-200 px-4 sm:px-6">
           {!quizStarted &&
             <div className="relative isolate px-6 pt-2 lg:px-8">
-              <div className="mx-auto max-w-4xl py-32 sm:py-48 lg:py-20">
+              <div className="mx-auto max-w-4xl py-10">
                 <div className='flex flex-col items-center'>
                   <h1 className="text-4xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
                     Scrum Development Progress
                   </h1>
                   <Image
                     src="/assets/images/scrumpillars.svg"
-                    alt="Flowbite Logo"
+                    alt="scrum pillars"
                     width={500}
                     height={0}
                   // className="mr-3 h-6 sm:h-9"
@@ -179,7 +186,7 @@ export default function Page({ params }) {
 
           {quizStarted &&
             <div>
-              <h1 className="text-3xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <h1 className="py-8 text-3xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
                 Scrum Values Quiz
               </h1>
 
@@ -282,8 +289,21 @@ export default function Page({ params }) {
         <div className='flex flex-col items-center py-1'>
           {!quizStarted &&
             <div className="relative isolate px-6 pt-2 lg:px-8">
-              <div className="mx-auto max-w-4xl py-32 sm:py-48 lg:pt-20 lg:pb-10">
-                {introParagraph}
+              <h1 className="text-4xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
+                Scrum Development Progress
+              </h1>
+              <div className="mx-auto max-w-4xl py-10">
+                <div className='flex flex-col items-center'>
+
+                  <Image
+                    src="/assets/images/scrumpillars.svg"
+                    alt="scrum pillars"
+                    width={500}
+                    height={0}
+                  // className="mr-3 h-6 sm:h-9"
+                  />
+                  {introParagraph}
+                </div>
                 <div className="mt-5 flex items-center justify-center gap-x-6">
                   <button
                     className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -296,8 +316,7 @@ export default function Page({ params }) {
                   </a>
                 </div>
               </div>
-            </div>
-          }
+            </div>}
           {quizStarted && <div>
             <p className='py-2'> Questions </p>
             <nav className="isolate inline-flex rounded-md shadow-sm" aria-label="Pagination">
