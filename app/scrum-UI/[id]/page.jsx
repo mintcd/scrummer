@@ -166,10 +166,13 @@ export default function Page({ params }) {
   }
 
   function handlePaginate(value) {
-    const newQuestionDone = [...questionDone];
-    newQuestionDone[questionNumber - 1] = true;
 
-    setQuestionDone(newQuestionDone);
+    if (questionNumber != value) {
+      const newQuestionDone = [...questionDone];
+      newQuestionDone[questionNumber - 1] = true;
+      setQuestionDone(newQuestionDone);
+    }
+
     setQuestionNumber(value);
   }
 
