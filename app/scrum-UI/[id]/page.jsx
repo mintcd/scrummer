@@ -18,6 +18,7 @@ import { Radar } from 'react-chartjs-2';
 export default function Page({ params }) {
 
   // Hooks
+  const [questionDone, setQuestionDone] = useState([false, false, false, false, false])
   const [quizStarted, setQuizStarted] = useState(false)
   const [questionNumber, setQuestionNumber] = useState(1)
   const [result, setResult] = useState(
@@ -135,6 +136,11 @@ export default function Page({ params }) {
     setFinished(true)
   }
 
+  function handleFinish2() {
+    const someQuestionUndone = Object.values(result).some(subArray => subArray.every(value => value === false));
+    setFinished(true)
+  }
+
   function handleReset() {
     setFinished(false)
     setQuestionNumber(1)
@@ -143,11 +149,28 @@ export default function Page({ params }) {
     ), {}))
   }
 
+  function handleReset2() {
+    setFinished(false)
+    setQuestionNumber(1)
+    setResult([1, 2, 3, 4, 5].reduce((obj, value) => (
+      { ...obj, [value]: [false, false, false, false, false] }
+    ), {}))
+    setQuestionDone([false, false, false, false, false])
+  }
+
   function scrollToElement(elementName) {
     const targetElement = document.getElementByName(elementName);
     if (targetElement) {
       targetElement.scrollIntoView({ behavior: 'smooth' });
     }
+  }
+
+  function handlePaginate(value) {
+    const newQuestionDone = [...questionDone];
+    newQuestionDone[questionNumber - 1] = true;
+
+    setQuestionDone(newQuestionDone);
+    setQuestionNumber(value);
   }
 
   return (
@@ -200,7 +223,7 @@ export default function Page({ params }) {
                       Do you think it is beautiful? Feel free to give advice!
                     </p>
                     <button
-                      className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      className="my-4 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       onClick={handleReset}
                     >
                       Retake
@@ -212,28 +235,27 @@ export default function Page({ params }) {
                   </h1>
                   {questions[questionNumber - 1].value.map((option, index) =>
                     <span key={`${questionNumber}${index}`} onClick={() => handleChange(index)}>
-                      <div class="flex items-center mb-4">
+                      <div className="flex items-center mb-4">
                         <input
                           type="checkbox"
-                          class="w-4 h-4 text-orange-300 bg-gray-100 border-gray-300 rounded focus:ring-orange-300 dark:focus:ring-orange-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          className="w-4 h-4 text-orange-300 bg-gray-100 border-gray-300 rounded focus:ring-orange-300 dark:focus:ring-orange-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           checked={result[questionNumber][index]}
                         />
                         <label for="default-checkbox"
-                          class="ml-2 text-justify text-sm font-medium text-gray-900 dark:text-gray-300">
+                          className="ml-2 text-justify text-sm font-medium text-gray-900 dark:text-gray-300">
                           {option}
                         </label>
                       </div>
                     </span>
                   )}
-                  {console.log(result)}
-                  <div className="bg-white flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">
+                  <div name="back-next" className="bg-white flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">
                     {questionNumber === 1 && <div></div>}
                     {questionNumber > 1 &&
                       <button type="button"
-                        class="text-white bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        className="text-white bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         onClick={handleBack}>
                         <svg aria-hidden="true"
-                          class="w-5 h-5 mr-2 -ml-1 transform rotate-180" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                          className="w-5 h-5 mr-2 -ml-1 transform rotate-180" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
                         Back
@@ -241,7 +263,7 @@ export default function Page({ params }) {
 
                     {questionNumber < 5 &&
                       <button type="button"
-                        class="text-white bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        className="text-white bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         onClick={handleNext}>
                         Next
                         <ArrowRightIcon className="ml-2 h-5 w-5" aria-hidden="true" />
@@ -250,22 +272,24 @@ export default function Page({ params }) {
                       </button>}
                     {questionNumber === 5 &&
                       <button type="button"
-                        class="text-white bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        className="text-white bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         onClick={handleFinish}
                       >
                         Finish
-                        <svg aria-hidden="true" class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        <svg aria-hidden="true" className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                       </button>}
                   </div>
 
 
-                </div>}
-                {<div>
+                </div>
+                }
+                <div>
                   <Radar data={data} options={options} />
-                </div>}
+                </div>
               </div>
 
-            </div>}
+            </div>
+          }
 
           {!quizStarted && <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
             <div className="flex flex-1 justify-between sm:hidden">
@@ -286,15 +310,14 @@ export default function Page({ params }) {
 
         </div>}
       {params.id == 2 &&
-        <div className='flex flex-col items-center py-1'>
+        <div className="bg-white flex flex-col items-center justify-between border-t border-gray-200 px-4 sm:px-6">
           {!quizStarted &&
-            <div className="relative isolate px-6 pt-2 lg:px-8">
+            <div>
               <h1 className="text-4xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
                 Scrum Development Progress
               </h1>
-              <div className="mx-auto max-w-4xl py-10">
-                <div className='flex flex-col items-center'>
-
+              <div className='grid items-center grid-cols-1 gap-4 sm:grid-cols-2'>
+                <div>
                   <Image
                     src="/assets/images/scrumpillars.svg"
                     alt="scrum pillars"
@@ -302,38 +325,120 @@ export default function Page({ params }) {
                     height={0}
                   // className="mr-3 h-6 sm:h-9"
                   />
+                </div>
+                <div>
                   {introParagraph}
+                  <div className="mt-5 flex items-center justify-center gap-x-6">
+                    <button
+                      className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      onClick={handleTakeQuiz}
+                    >
+                      Take Quiz
+                    </button>
+                    <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
+                      Explore <span aria-hidden="true">→</span>
+                    </a>
+                  </div>
                 </div>
-                <div className="mt-5 flex items-center justify-center gap-x-6">
-                  <button
-                    className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={handleTakeQuiz}
-                  >
-                    Take Quiz
-                  </button>
-                  <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
-                    Explore <span aria-hidden="true">→</span>
-                  </a>
-                </div>
+
               </div>
+            </div>
+          }
+
+          {quizStarted &&
+            <div>
+              <h1 className="py-8 text-3xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
+                Scrum Values Quiz
+              </h1>
+              <div>
+                <nav className="isolate inline-flex rounded-md shadow-sm" aria-label="Pagination">
+                  {[1, 2, 3, 4, 5].map(value => (
+                    <div>
+                      {questionDone[value - 1] ?
+                        <button
+                          className={`bg-orange-400 mx-6 inline-flex items-center justify-center w-12 h-12 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 rounded-full`}
+                          key={value}
+                          href=""
+                          onClick={() => handlePaginate(value)}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </button> :
+                        <button
+                          className={`bg-orange-200 mx-6 inline-flex items-center justify-center w-12 h-12 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 rounded-full`}
+                          key={value}
+                          href=""
+                          onClick={() => handlePaginate(value)}
+                        >
+                          {value}
+                        </button>}
+                    </div>
+
+                  ))}
+                </nav>
+              </div>
+
+
+              <div className=''>
+                {!finished &&
+                  <div>
+                    <h1 className="text-3xl text-center font-bold tracking-tight text-gray-900 sm:text-4xl py-3">
+                      {questions[questionNumber - 1].key}
+                    </h1>
+                    {questions[questionNumber - 1].value.map((option, index) =>
+                      <span key={`${questionNumber}${index}`} onClick={() => handleChange(index)}>
+                        <div className="flex items-center mb-4">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 text-orange-300 bg-gray-100 border-gray-300 rounded focus:ring-orange-300 dark:focus:ring-orange-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            checked={result[questionNumber][index]}
+                          />
+                          <label for="default-checkbox"
+                            className="ml-2 text-justify text-sm font-medium text-gray-900 dark:text-gray-300">
+                            {option}
+                          </label>
+                        </div>
+                      </span>
+                    )}
+
+                    <button type="button"
+                      className="mb-4 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      onClick={handleFinish2}
+                    >
+                      Finish
+                      <svg aria-hidden="true" className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    </button>
+                  </div>
+                }
+
+                {finished && <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+                  <div className="mt-6 text-center text-lg leading-8 text-gray-600">
+                    <p>
+                      Congratulations. You have successfully completed.
+                    </p>
+                    <p>
+                      Do you think it is beautiful? Feel free to give advice!
+                    </p>
+                    <button
+                      className="my-4 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      onClick={handleReset2}
+                    >
+                      Retake
+                    </button>
+                  </div>
+
+                  <div>
+                    <Radar data={data} options={options} />
+                  </div>
+                </div>
+                }
+
+              </div>
+
             </div>}
-          {quizStarted && <div>
-            <p className='py-2'> Questions </p>
-            <nav className="isolate inline-flex rounded-md shadow-sm" aria-label="Pagination">
-              {[1, 2, 3, 4, 5].map(value => (
-                <button
-                  className="inline-flex items-center justify-center w-8 h-8 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 rounded-full mx-2"
-                  key={value}
-                  href=""
-                >
-                  {value}
-                </button>
-              ))}
-            </nav>
-          </div>}
+
         </div>
-
-
       }
 
       {params.id > 2 &&

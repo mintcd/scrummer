@@ -17,7 +17,7 @@ export default function Nav() {
 			>
 				<Navbar.Brand href="/">
 					<Image
-						src="/assets/images/logo.svg"
+						src="/assets/images/grid.svg"
 						alt="Flowbite Logo"
 						width={24}
 						height={36}

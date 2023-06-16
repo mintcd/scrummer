@@ -23,7 +23,7 @@ export default function Page({ params }) {
               In general, the UIs contain the Introduction, Question, Chart and Result (Advice) components
             </p>
 
-            {/* <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+            {/* <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
               <li>
                 At least 10 characters (and up to 100 characters)
               </li>
