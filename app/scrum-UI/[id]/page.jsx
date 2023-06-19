@@ -13,6 +13,7 @@ export default function Page({ params }) {
       {params.id == 1 && <UI1 />}
       {params.id == 2 && <UI2 />}
       {params.id == 3 && <UI3 />}
+      {params.id > 3 && <div> Coming soon... </div>}
       <UINavigation />
     </div>
   )

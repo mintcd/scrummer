@@ -1,25 +1,68 @@
-<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover"
-    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-    type="button">Dropdown hover
-</button>
-<!-- Dropdown menu -->
-<div id="dropdownHover" className="text-gray-700">
-    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
-        <li>
-            <a href="#"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-        </li>
-        <li>
-            <a href="#"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-        </li>
-        <li>
-            <a href="#"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-        </li>
-        <li>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign
-                out</a>
-        </li>
-    </ul>
+<div class="grid grid-cols-3">
+    <div class="col-span-2">
+        <div data-te-spy="scroll" data-te-target="#scrollspy1" data-te-offset="200" class="relative h-48 overflow-auto">
+            <section id="example-1">
+                <h3 class="pb-3 pt-5 text-xl font-semibold">Section 1</h3>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
+                    earum natus vel minima quod error maxime, molestias ut. Fuga
+                    dignissimos nisi nemo necessitatibus quisquam obcaecati et
+                    reiciendis quaerat accusamus numquam.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
+                    earum natus vel minima quod error maxime, molestias ut. Fuga
+                    dignissimos nisi nemo necessitatibus quisquam obcaecati et
+                    reiciendis quaerat accusamus numquam.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
+                    earum natus vel minima quod error maxime, molestias ut. Fuga
+                    dignissimos nisi nemo necessitatibus quisquam obcaecati et
+                    reiciendis quaerat accusamus numquam.
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <div>
+        <!-- Scrollspy -->
+        <div id="scrollspy1" class="sticky-top pl-3 text-sm">
+            <ul data-te-nav-list-ref>
+                <li class="py-1">
+                    <a data-te-nav-link-ref data-te-nav-link-active
+                        class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
+                        href="#example-1">Section 1</a>
+                </li>
+                <li class="py-1">
+                    <a data-te-nav-link-ref
+                        class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
+                        href="#example-2">Section 2</a>
+                </li>
+                <li class="py-1">
+                    <a data-te-nav-link-ref
+                        class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
+                        href="#example-3">Section 3</a>
+                    <ul data-te-nav-list-ref class="pl-3">
+                        <li class="py-1">
+                            <a data-te-nav-link-ref
+                                class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
+                                href="#example-sub-A">Subsection A</a>
+                        </li>
+                        <li>
+                            <a data-te-nav-link-ref
+                                class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
+                                href="#example-sub-B">Subsection B</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="py-1">
+                    <a data-te-nav-link-ref
+                        class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
+                        href="#example-4">Section 4</a>
+                </li>
+            </ul>
+        </div>
+        <!-- Scrollspy -->
+    </div>
 </div>

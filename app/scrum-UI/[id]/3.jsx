@@ -14,9 +14,14 @@ import { Radar } from 'react-chartjs-2';
 export default function UI() {
   useEffect(() => {
     initTE({ Scrollspy });
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [])
 
   // Hooks
+  const [activeSpyee, setActiveSpyee] = useState('');
   const [started, setStarted] = useState(false)
   const [result, setResult] = useState(() =>
     Array(5).fill().map(() => Array(5).fill(false))
@@ -55,6 +60,21 @@ export default function UI() {
 
   // Handlers
 
+  function handleScroll() {
+    const scrollspyElements = document.querySelectorAll('[data-te-nav-link-ref]');
+    let active = '';
+    for (let i = scrollspyElements.length - 1; i >= 0; i--) {
+      const spyee = scrollspyElements[i].getAttribute('href').substring(1);
+      const spyeeElement = document.getElementById(spyee);
+      const rect = spyeeElement.getBoundingClientRect();
+      if (rect.top <= 0) {
+        active = spyee;
+        break;
+      }
+    }
+    setActiveSpyee(active);
+  }
+
   function handleStart() {
     setStarted(true);
   }
@@ -67,12 +87,14 @@ export default function UI() {
 
   function handleFinish() {
     setFinished(true)
+    setActiveSpyee('Finish');
   }
 
   function handleReset() {
     setStarted(false)
     setResult(Array(5).fill().map(() => Array(5).fill(false)))
     setFinished(false)
+    setActiveSpyee('');
   }
 
   return (
@@ -124,7 +146,7 @@ export default function UI() {
                         <a
                           data-te-nav-link-ref
                           data-te-nav-link-active
-                          className="bg-transparent px-1 text-neutral-600 shadow-none dark:text-neutral-200"
+                          class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
                           href={`#${question.key}`}
                         >
                           {question.key}
@@ -134,8 +156,8 @@ export default function UI() {
                     <li className="px-1 py-3 text-left" key="finish" style={{ marginLeft: 0 }}>
                       <a
                         data-te-nav-link-ref
-                        data-te-nav-link-active
-                        className="bg-transparent px-1 text-neutral-600 shadow-none dark:text-neutral-200"
+                        data-te-nav-link-active={activeSpyee === 'Finish'}  // Apply bold styling if activeSpyee is "Finish"
+                        className={`bg-transparent px-1 text-neutral-600 shadow-none dark:text-neutral-200 ${activeSpyee === 'Finish' ? 'font-bold' : ''}`}  // Add font-bold class
                         href={`#Finish`}
                       >
                         Finish
