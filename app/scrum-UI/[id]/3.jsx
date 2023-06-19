@@ -32,7 +32,7 @@ export default function UI() {
     labels: questions.map((question) => question.key),
     datasets: [
       {
-        label: "See how you area gets larger",
+        label: "Point",
         data: result.map(each => each.reduce((count, value) => count + (value === true ? 1 : 0), 0)),
         backgroundColor: 'rgba(255, 165, 0, 0.2)',
         borderColor: 'rgba(255, 165, 0, 1)',
