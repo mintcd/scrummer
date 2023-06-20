@@ -101,24 +101,22 @@ export default function UI() {
         </div>
         <div>
           <p className="text-justify text-lg mt-6 leading-8 text-gray-600">
-            Welcome to a self-evaluation quiz to see how familiar you are in Scrum by grading each scrum value. <br />
-            <br />
-            Overview:
+            Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum. The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value.
+            <br /><br />
+            Key Aspects:
             <ul className="list-disc ml-4">
               <li>
-                An empirical framework for iterative software development
-              </li>
+                Scrum: An empirical framework for iterative software development.              </li>
               <li>
-                Three pillars: Transparency, Inspection, and Adaptation.
-              </li>
+                Three pillars of Scrum: Transparency, Inspection, and Adaptation.              </li>
               <li>
-                Then raised up to five more specific values: Courage, Focus, Commitment, Respect, and Openness.
-              </li>
+                Specific values in Scrum: Courage, Focus, Commitment, Respect, and Openness.   </li>
             </ul>
             <br />
 
-            New to Scrum? Take it as a way to determine your co-work ability in general or <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
-              Explore Scrum guide <span aria-hidden="true">→</span>
+            New to Scrum? Take it easy! This metric can help assess your ability to collaborate effectively in general.
+            If you're looking for a comprehensive understanding of Scrum, please refer <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
+              Scrum guide <span aria-hidden="true">→</span>
             </a>
 
           </p>
