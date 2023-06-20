@@ -9,8 +9,6 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, 
 import { Radar } from 'react-chartjs-2';
 
 
-
-
 export default function UI() {
   useEffect(() => {
     initTE({ Scrollspy });
@@ -137,7 +135,6 @@ export default function UI() {
           </h1>
           {!finished ?
             <div class="grid grid-cols-3">
-
               <div className="col-span-3 sm:col-span-1">
                 <div id="scrollspy1" className="sticky-top pl-3 text-sm overflow-x-auto">
                   <ul data-te-nav-list-ref className="flex sm:flex-col space-x-4 sm:space-y-4 justify-center">
