@@ -87,8 +87,8 @@ export default function UI() {
   return (
     <div>
       <div className="flex flex-col items-center">
-        <h1 className="text-4xl py-8 text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
-          HOW MUCH ARE YOU INTO SCRUM?
+        <h1 className="text-4xl py-8 text-center font-bold tracking-tight text-gray-900 sm:text-5xl">
+          SCRUM VALUES QUIZ
         </h1>
         <div>
           <Image
@@ -101,12 +101,26 @@ export default function UI() {
         </div>
         <div>
           <p className="text-justify text-lg mt-6 leading-8 text-gray-600">
-            Welcome to a quiz to for you to valuate how familiar you are in Scrum. <br />
+            Welcome to a self-evaluation quiz to see how familiar you are in Scrum by grading each scrum value. <br />
+            <br />
+            Overview:
+            <ul className="list-disc ml-4">
+              <li>
+                An empirical framework for iterative software development
+              </li>
+              <li>
+                Three pillars: Transparency, Inspection, and Adaptation.
+              </li>
+              <li>
+                Then raised up to five more specific values: Courage, Focus, Commitment, Respect, and Openness.
+              </li>
+            </ul>
+            <br />
+
             New to Scrum? Take it as a way to determine your co-work ability in general or <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
-              Explore <span aria-hidden="true">→</span>
+              Explore Scrum guide <span aria-hidden="true">→</span>
             </a>
-            Revision: Scrum is an empirical framework for iterative software development based on three pillars, which are Transparency, Inspection, and Adaptation.
-            Then raised five more specific values: Courage, Focus, Commitment, Respect, and Openness.<br />
+
           </p>
           <div className="mt-5 flex items-center justify-center gap-x-6">
             <button
