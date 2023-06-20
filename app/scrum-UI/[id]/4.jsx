@@ -88,7 +88,7 @@ export default function UI() {
     <div>
       <div className="flex flex-col items-center">
         <h1 className="text-4xl py-8 text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
-          Scrum Development Progress
+          HOW MUCH ARE YOU INTO SCRUM?
         </h1>
         <div>
           <Image
@@ -100,7 +100,14 @@ export default function UI() {
           />
         </div>
         <div>
-          {introParagraph}
+          <p className="text-justify text-lg mt-6 leading-8 text-gray-600">
+            Welcome to a quiz to for you to valuate how familiar you are in Scrum. <br />
+            New to Scrum? Take it as a way to determine your co-work ability in general or <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
+              Explore <span aria-hidden="true">→</span>
+            </a>
+            Revision: Scrum is an empirical framework for iterative software development based on three pillars, which are Transparency, Inspection, and Adaptation.
+            Then raised five more specific values: Courage, Focus, Commitment, Respect, and Openness.<br />
+          </p>
           <div className="mt-5 flex items-center justify-center gap-x-6">
             <button
               className="my-4 h-10 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -108,9 +115,6 @@ export default function UI() {
             >
               Take Quiz
             </button>
-            <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
-              Explore <span aria-hidden="true">→</span>
-            </a>
           </div>
         </div>
       </div>
