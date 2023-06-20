@@ -137,7 +137,7 @@ export default function UI() {
               data-te-spy="scroll"
               data-te-target="#scrollspy1"
               data-te-offset="200"
-              class="relative snap-y h-80 overflow-auto"
+              class="relative snap-y h-80 overflow-auto px-3"
             >
               {questions.map((question, questionIndex) => (
                 <div id={question.key} className="snap-start" key={question.key}>
