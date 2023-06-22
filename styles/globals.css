@@ -202,3 +202,9 @@
 .home-section{
   @apply w-full flex-center flex-col
 }
+
+
+.arrow-transition {
+  transition: transform 0.5s ease-in-out;
+}
+

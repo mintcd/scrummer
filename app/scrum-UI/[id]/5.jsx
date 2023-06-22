@@ -5,7 +5,7 @@ import { Scrollspy, initTE } from "tw-elements";
 import questions from '@models/questions'
 import introParagraph from '@components/scrumUI/intro'
 import Image from 'next/image'
-import { BsArrowRight } from 'react-icons/bs'
+import { BsArrowRight, BsCheck2 } from 'react-icons/bs'
 import { FaSearch } from 'react-icons/fa';
 
 import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js'
@@ -91,6 +91,10 @@ export default function UI() {
     setResult(newResult)
   }
 
+  function handleFinish() {
+    setFinished(true)
+  }
+
   return (
     <div>
       <div className="flex flex-col items-center">
@@ -156,14 +160,17 @@ export default function UI() {
 
                 <div className="flex justify-end">
                   <button
-                    className="my-4 h-10 text-white bg-gradient-to-r from-blue-500 via-blue-550 to-blue-600 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    className={`my-4 h-10 text-white bg-gradient-to-r from-blue-500 via-blue-550 to-blue-600 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${started ? 'arrow-transition' : ''}`}
                     onClick={handleStart}
                   >
                     <strong className="flex items-center">
                       Start
-                      <BsArrowRight className="ml-2 w-6 h-6" />
+                      <span className={`ml-2 w-4 h-4 transition-transform transform ${started ? 'rotate-90' : ''}`}>
+                        <BsArrowRight />
+                      </span>
                     </strong>
                   </button>
+
                 </div>
               </div>
             </div>
@@ -228,11 +235,11 @@ export default function UI() {
                 </div>
               ))}
             </div>
+
+            <div class="border-t py-3"></div>
           </div>
           <div class="col-span-5 sm:col-span-2">
             <Radar data={data} options={options} />
-            <div className="text-gray-600 text-sm"> Occupied area: {getArea()}%  </div>
-            <div className="text-gray-600 text-sm"> Have you seen "achieving more from more achieved" is more valueable? </div>
           </div>
         </div>
       }
