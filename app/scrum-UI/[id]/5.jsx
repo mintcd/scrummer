@@ -99,7 +99,7 @@ export default function UI() {
         </h1>
 
         <div className="grid grid-cols-2 items-center text-justify text-base">
-          {<div>
+          {<div className="col-span-2 sm:col-span-1">
             <Image
               src="/assets/images/values.svg"
               alt="scrum pillars"
@@ -107,11 +107,12 @@ export default function UI() {
               height={0}
             />
           </div>}
-          <div className="pt-4">
-            {!reviewed && <p>
-              Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
-              The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
-            </p>}
+          <div className="pt-4 col-span-2 sm:col-span-1">
+            {!reviewed &&
+              <p className="text-justify text-lg mt-6 leading-8 text-gray-700">
+                Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
+                The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
+              </p>}
 
             {reviewed &&
               <div>
