@@ -1,11 +1,14 @@
+'use client'
+
 import { useState, useEffect, useRef } from "react";
 import { Scrollspy, initTE } from "tw-elements";
 import questions from '@models/questions'
 import introParagraph from '@components/scrumUI/intro'
 import Image from 'next/image'
+import { BsArrowRight } from 'react-icons/bs'
+import { FaSearch } from 'react-icons/fa';
 
 import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js'
-
 import { Radar } from 'react-chartjs-2';
 
 
@@ -21,7 +24,7 @@ export default function UI() {
 
   // Hooks
   const quizRef = useRef(null);
-  const [activeSpyee, setActiveSpyee] = useState('');
+  const [reviewed, setReviewed] = useState(false)
   const [started, setStarted] = useState(false)
   const [result, setResult] = useState(() =>
     Array(5).fill().map(() => Array(5).fill(false))
@@ -44,8 +47,8 @@ export default function UI() {
       {
         label: "See how you area gets larger",
         data: result.map(each => each.reduce((count, value) => count + (value === true ? 1 : 0), 0)),
-        backgroundColor: 'rgba(255, 165, 0, 0.2)',
-        borderColor: 'rgba(255, 165, 0, 1)',
+        backgroundColor: 'rgba(173, 216, 255, 1)',
+        borderColor: 'rgba(96, 165, 250, 1)',
         borderWidth: 1,
         scaleStep: 1,
       },
@@ -78,6 +81,10 @@ export default function UI() {
     }, 500); // Adjust the timeout duration if needed
   }
 
+  function handleReview() {
+    setReviewed(true)
+  }
+
   function handleChange(questionIndex, optionIndex) {
     let newResult = [...result]
     newResult[questionIndex][optionIndex] = !newResult[questionIndex][optionIndex]
@@ -90,47 +97,82 @@ export default function UI() {
         <h1 className="text-4xl py-8 text-center font-bold tracking-tight text-gray-900 sm:text-5xl">
           SCRUM VALUES QUIZ
         </h1>
-        <div>
-          <Image
-            src="/assets/images/scrumpillars.svg"
-            alt="scrum pillars"
-            width={500}
-            height={0}
-          // className="mr-3 h-6 sm:h-9"
-          />
-        </div>
-        <div>
-          <p className="text-justify text-lg mt-6 leading-8 text-gray-600">
-            Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum. The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value.
-            <br /><br />
-            Key Aspects:
-            <ul className="list-disc ml-4">
-              <li>
-                Scrum: An empirical framework for iterative software development.              </li>
-              <li>
-                Three pillars of Scrum: Transparency, Inspection, and Adaptation.              </li>
-              <li>
-                Specific values in Scrum: Courage, Focus, Commitment, Respect, and Openness.   </li>
-            </ul>
-            <br />
 
-            New to Scrum? Take it easy! This metric can help assess your ability to collaborate effectively in general.
-            If you're looking for a comprehensive understanding of Scrum, please refer <a href="https://scrumguides.org/" target="_blank" className="text-sm font-semibold leading-6 text-gray-900">
-              Scrum guide <span aria-hidden="true">→</span>
-            </a>
+        <div className="grid grid-cols-2 items-center text-justify text-base">
+          {<div>
+            <Image
+              src="/assets/images/values.svg"
+              alt="scrum pillars"
+              width={500}
+              height={0}
+            />
+          </div>}
+          <div className="pt-4">
+            {!reviewed && <p>
+              Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
+              The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
+            </p>}
 
-          </p>
-          <div className="mt-5 flex items-center justify-center gap-x-6">
-            <button
-              className="my-4 h-10 text-white bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              onClick={handleStart}
-            >
-              Take Quiz
-            </button>
+            {reviewed &&
+              <div>
+                <p className="text-justify text-lg mt-6 leading-8 text-gray-700">
+                  Key Aspects:
+                  <ul className="list-disc ml-4">
+                    <li>
+                      Scrum: An empirical framework for iterative software development.              </li>
+                    <li>
+                      Three pillars of Scrum: Transparency, Inspection, and Adaptation.              </li>
+                    <li>
+                      Specific values in Scrum: Courage, Focus, Commitment, Respect, and Openness.   </li>
+                  </ul>
+                  <br />
+                </p>
+              </div>
+            }
+
+            <div>
+              <div class="grid grid-cols-2">
+                <div class="flex justify-start">
+                  {!reviewed && <button
+                    className="my-4 mr-2 h-10 text-blue-500 focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onClick={handleReview}
+                  >
+                    Review
+                  </button>}
+
+                  <a href="https://scrumguides.org/" target="_blank" className="my-4 flex items-center">
+                    <button
+                      className="h-10 text-blue-600 bg-blue-200 focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      onClick={handleStart}
+                    >
+                      Explore
+                      <FaSearch className="ml-2 w-4 h-4 text-blue-400" />
+                    </button>
+                  </a>
+
+
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    className="my-4 h-10 text-white bg-gradient-to-r from-blue-500 via-blue-550 to-blue-600 hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onClick={handleStart}
+                  >
+                    <strong className="flex items-center">
+                      Start
+                      <BsArrowRight className="ml-2 w-6 h-6" />
+                    </strong>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
+
       </div>
-      {started &&
+      {
+        started &&
         <div class="grid grid-cols-5 py-8">
           <div class="col-span-5 sm:col-span-3">
             <div id="scrollspy1" className="sticky-top pl-3 text-sm overflow-x-auto" ref={quizRef}>
@@ -169,8 +211,8 @@ export default function UI() {
                         <input
                           id={`${questionIndex}${optionIndex}-checkbox`}
                           type="checkbox"
-                          className={`w-4 h-4 text-gray-100 bg-transparent border-2 ${result[questionIndex][optionIndex] ? 'border-orange-400' : 'border-orange-300'
-                            } accent-orange-400 rounded checked:bg-orange-400`}
+                          className="w-4 h-4 text-gray-100 bg-transparent border-2 
+                          accent-blue-400 rounded checked:bg-blue-400"
                           checked={result[questionIndex][optionIndex] === true}
                           onChange={() => handleChange(questionIndex, optionIndex)}
                         />
@@ -191,7 +233,8 @@ export default function UI() {
             <div className="text-gray-600 text-sm"> Occupied area: {getArea()}%  </div>
             <div className="text-gray-600 text-sm"> Have you seen "achieving more from more achieved" is more valueable? </div>
           </div>
-        </div>}
-    </div>
+        </div>
+      }
+    </div >
   )
 }
