@@ -146,7 +146,7 @@ export default function UI() {
                 <div
                   class="text-center pt-6 sm:pt-32 font-extrabold text-transparent text-6xl sm:text-8xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue"
                 >
-                  Review
+                  Scrum Values Quiz
                 </div>
 
                 <div className="svg-image">
