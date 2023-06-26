@@ -327,15 +327,21 @@ export default function UI() {
       }
       {
         finished &&
-        <div class="items-center justify-center">
-          <Radar data={data} options={options} />
-          <div className="text-sm text-gray-600"> Wasn't your best? Retake </div>
-          <button
-            className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-            onClick={handleReset}
-          >
-            <BsArrowCounterclockwise width={10} height={10} />
-          </button>
+        <div class="grid grid-cols-5 items-center justify-center">
+          <div className="col-span-5 sm:col-span-4 flex justify-center w-full h-[35rem]">
+            <Radar data={data} options={options} />
+          </div>
+
+          <div className="col-span-5 sm:col-span-1 text-sm text-gray-600">
+            Wasn't your best? Retake <br />
+            <button
+              className={`my-4 w-10 h-10 justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+              onClick={handleReset}
+            >
+              <BsArrowCounterclockwise width={10} height={10} />
+            </button>
+          </div>
+
         </div>
       }
     </div >
