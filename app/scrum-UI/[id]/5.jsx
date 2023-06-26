@@ -328,7 +328,7 @@ export default function UI() {
       {
         finished &&
         <div class="grid grid-cols-5 items-center justify-center">
-          <div className="col-span-5 sm:col-span-4 flex justify-center w-full h-[35rem]">
+          <div className="col-span-5 sm:col-span-4 flex justify-center w-full sm:h-[35rem]">
             <Radar data={data} options={options} />
           </div>
 
