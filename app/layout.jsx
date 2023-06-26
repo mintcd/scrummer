@@ -12,13 +12,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <div className='main-container'>
-          <div className='gradient' />
-          <main className='app'>
-            {children}
-          </main>
-        </div>
+      <body className=' bg-blue-100'>
+        <main className='app'>
+          {children}
+        </main>
       </body>
     </html>
   )

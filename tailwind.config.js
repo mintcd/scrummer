@@ -16,6 +16,9 @@ module.exports = {
       },
       colors: {
         'primary-orange': '#FF5722',
+        'vueGreen': '#42d392',
+        'vueBlue': '#647eff',
+        'background': '#97C9CB'
       }
     },
   },
