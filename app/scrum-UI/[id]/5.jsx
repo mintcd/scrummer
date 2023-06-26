@@ -335,10 +335,10 @@ export default function UI() {
           <div className="col-span-5 sm:col-span-1 text-sm text-gray-600">
             Wasn't your best? Retake <br />
             <button
-              className={`my-4 w-10 h-10 justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+              className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
               onClick={handleReset}
             >
-              <BsArrowCounterclockwise width={10} height={10} />
+              <BsArrowCounterclockwise />
             </button>
           </div>
 
