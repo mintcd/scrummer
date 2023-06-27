@@ -229,69 +229,70 @@ export default function UI() {
           <div class="pt-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
             Scrum Values Quiz
           </div>
-          <div className="grid grid-cols-2 items-center justify-center">
-            <div name="col-1" class="col-span-1">
-              <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={500} height={0} />
-            </div>
+          {!retaken &&
+            <div className="grid grid-cols-2 items-center justify-center">
+              <div name="col-1" class="col-span-1">
+                <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={500} height={0} />
+              </div>
 
-            <div name="col-2">
-              {!retaken &&
-                <div className="col-span-1 text-justify text-lg mt-6 leading-8">
-                  Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
-                  The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
-                </div>}
-              {reviewed &&
-                <div className="flex flex-col justify-center items-center text-lg">
-                  <p className="mt-4 text-left leading-8">
-                    Scrum is an empirical framework for iterative software development:
-                    <ul className="list-disc ml-4">
-                      <li> Based on <b>three pillars</b>: Transparency, Inspection, and Adaptation.</li>
-                      <li>
-                        Developed into <b>five values</b>: Courage, Focus, Commitment, Respect, and Openness.   </li>
-                    </ul>
-                  </p>
+              <div name="col-2">
+                {
+                  <div className="col-span-1 text-justify text-lg mt-6 leading-8">
+                    Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
+                    The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
+                  </div>}
+                {reviewed &&
+                  <div className="flex flex-col justify-center items-center text-lg">
+                    <p className="mt-4 text-left leading-8">
+                      Scrum is an empirical framework for iterative software development:
+                      <ul className="list-disc ml-4">
+                        <li> Based on <b>three pillars</b>: Transparency, Inspection, and Adaptation.</li>
+                        <li>
+                          Developed into <b>five values</b>: Courage, Focus, Commitment, Respect, and Openness.   </li>
+                      </ul>
+                    </p>
 
-                </div>}
-              {!finished && !retaken &&
-                <div name='buttons' className='grid grid-cols-5 font-[500]'>
-                  <div class="col-span-3 flex justify-start">
-                    {!reviewed &&
+                  </div>}
+                {!finished && !retaken &&
+                  <div name='buttons' className='grid grid-cols-5 font-[500]'>
+                    <div class="col-span-3 flex justify-start">
+                      {!reviewed &&
+                        <button
+                          className="w-[6rem] h-[2rem] my-4 mr-2  text-vueGreen"
+                          onClick={handleReview}>
+                          Review
+                        </button>}
+
+
                       <button
-                        className="w-[6rem] h-[2rem] my-4 mr-2  text-vueGreen"
-                        onClick={handleReview}>
-                        Review
-                      </button>}
-
-
-                    <button
-                      onClick={() => window.open('https://scrumguides.org/', '_blank')}
-                      className="rounded-lg w-[6rem] h-[2rem] px-5 my-4 mr-2  bg-vueGreen bg-opacity-30 flex justify-center items-center text-vueGreen"
-                    >
-                      Explore
-                      <span className={`ml-2 w-5 h-5`}>
-                        <FaSearch />
-                      </span>
-                    </button>
-
-                  </div>
-
-                  <div className="col-span-2 flex justify-end">
-                    <button
-                      className={`my-4 w-[6rem] h-[2rem] justify-center bg-vueGreen hover:bg-gradient-to-br rounded-lg inline-flex items-center ${started ? 'arrow-transition' : ''}`}
-                      onClick={handleStart}
-                    >
-                      <strong className="flex items-center text-white">
-                        Start
-                        <span className={`ml-2 w-4 h-4 transition-transform transform ${started ? 'rotate-90' : ''}`}>
-                          <BsArrowRight />
+                        onClick={() => window.open('https://scrumguides.org/', '_blank')}
+                        className="rounded-lg w-[6rem] h-[2rem] px-5 my-4 mr-2  bg-vueGreen bg-opacity-30 flex justify-center items-center text-vueGreen"
+                      >
+                        Explore
+                        <span className={`ml-2 w-5 h-5`}>
+                          <FaSearch />
                         </span>
-                      </strong>
-                    </button>
+                      </button>
+
+                    </div>
+
+                    <div className="col-span-2 flex justify-end">
+                      <button
+                        className={`my-4 w-[6rem] h-[2rem] justify-center bg-vueGreen hover:bg-gradient-to-br rounded-lg inline-flex items-center ${started ? 'arrow-transition' : ''}`}
+                        onClick={handleStart}
+                      >
+                        <strong className="flex items-center text-white">
+                          Start
+                          <span className={`ml-2 w-4 h-4 transition-transform transform ${started ? 'rotate-90' : ''}`}>
+                            <BsArrowRight />
+                          </span>
+                        </strong>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              }
-            </div>
-          </div>
+                }
+              </div>
+            </div>}
 
 
         </div>
