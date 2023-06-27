@@ -1,5 +1,7 @@
 'use client'
 
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+
 import { useState, useEffect, useRef } from "react";
 import { Scrollspy, initTE } from "tw-elements";
 import questions from '@models/questions'
@@ -8,11 +10,8 @@ import { BsArrowRight, BsArrowCounterclockwise } from 'react-icons/bs'
 import { FaSearch } from 'react-icons/fa';
 import { AiOutlineRight, AiOutlineLeft, AiOutlineCheck } from 'react-icons/ai'
 
-import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js'
+import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, Colors } from 'chart.js'
 import { Radar } from 'react-chartjs-2';
-
-
-
 
 export default function UI() {
   useEffect(() => {
@@ -24,6 +23,7 @@ export default function UI() {
 
   // Hooks
   const [questionNumber, setQuestionNumber] = useState(0)
+  const [questionDone, setQuestionDone] = useState(0)
   const quizRef = useRef(null);
   const [reviewed, setReviewed] = useState(false)
   const [started, setStarted] = useState(false)
@@ -55,7 +55,6 @@ export default function UI() {
         borderColor: 'rgba(66, 211, 146, 0.5)',
         borderWidth: 1,
         scaleStep: 1,
-        // Remove the label property
       },
     ],
   };
@@ -76,6 +75,16 @@ export default function UI() {
         },
       },
     },
+    plugins: {
+      legend: {
+        labels: {
+          // This more specific font property overrides the global property
+          font: {
+            size: 15
+          }
+        }
+      }
+    }
   };
 
 
@@ -96,108 +105,179 @@ export default function UI() {
     let newResult = [...result]
     newResult[questionIndex][optionIndex] = !newResult[questionIndex][optionIndex]
     setResult(newResult)
+    setQuestionDone(questionDone + Number(questionNumber >= questionDone))
   }
 
   function handleFinish() {
-    setFinished(true)
+    const shouldFinish = window.confirm('Are you sure you want to finish?')
+    if (shouldFinish) setFinished(true)
   }
 
   function handleBack() {
     let newResult = [...result]
     newResult[questionNumber - 1] = [false, false, false, false, false]
-    setQuestionNumber(questionNumber - 1)
+    if (questionNumber > 0) setQuestionNumber(questionNumber - 1)
   }
 
   function handleNext() {
     let newResult = [...result]
     newResult[questionNumber + 1] = [false, false, false, false, false]
     setQuestionNumber(questionNumber + 1)
+    setQuestionDone(questionDone + Number(questionNumber >= questionDone))
   }
 
   function handleReset() {
     setQuestionNumber(0)
     setReviewed(false)
     setResult(Array(5).fill().map(() => Array(5).fill(false)));
+    setQuestionDone(0)
     setFinished(false)
     setRetaken(true)
   }
 
+  // Reusable components
+  const bottom = <div name='bottom' class="grid grid-cols-5 justify-center items-center text-sm">
+    <div class="flex col-span-1 justify-start">
+      <button
+        className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+        onClick={handleBack}
+      >
+        <AiOutlineLeft width={10} height={10} />
+      </button>
+
+    </div>
+
+    <div name="progress-bar" className="w-full col-span-3">
+      <div
+        className="h-2 transition-width duration-500"
+        style={{
+          width: `${questionDone * 20}%`,
+          backgroundColor: 'rgba(66, 211, 146, 0.3)',
+        }}
+      ></div>
+      <div
+        className="h-2 bg-vueGreen transition-width duration-500"
+        style={{
+          width: `${(questionNumber + 1) * 20}%`,
+          backgroundColor: 'rgba(66, 211, 146, 0.5)',
+        }}
+      ></div>
+      <div className="taken">
+        {questionDone}/5 taken
+      </div>
+    </div>
+    <div className="flex col-span-1 justify-end">
+      {questionNumber < 4 ?
+        <button
+          className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+          onClick={handleNext}
+        >
+          <AiOutlineRight />
+        </button>
+        :
+        <button
+          className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+          onClick={handleFinish}
+        >
+          <AiOutlineCheck />
+        </button>
+      }
+    </div>
+  </div>
+
+  const question = <div name="questions" ref={quizRef}>
+    {questions.map((question, questionIndex) => (
+      questionNumber === questionIndex &&
+      <div id={question.key} className="snap-start" key={question.key}>
+        <div name="question-title" className="py-2 text-2xl text-center font-bold tracking-tight sm:text-2xl">
+          {question.key}
+        </div>
+        {question.value.map((option, optionIndex) => (
+          <div className="">
+            <div name="options" className="">
+              <div className={`my-2 rounded-lg p-2 bg-vueGreen sm:hover:bg-vueBlue sm:hover:bg-opacity-30 ${result[questionIndex][optionIndex] ? 'bg-vueBlue bg-opacity-50' : 'bg-vueBlue bg-opacity-20'}`}>
+                <label
+                  htmlFor={`${questionIndex}${optionIndex}-checkbox`}
+                  className="flex items-center cursor-pointer"
+                >
+                  <input
+                    id={`${questionIndex}${optionIndex}-checkbox`}
+                    type="checkbox"
+                    className="w-0 h-0"
+                    checked={result[questionIndex][optionIndex] === true}
+                    onChange={() => handleChange(questionIndex, optionIndex)}
+                  />
+                  <span className="text-justify text-sm font-medium">
+                    {option}
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ))}
+    {bottom}
+    <div class="border-t py-3"></div>
+  </div>
+
+
   return (
     <div>
-      <div className="flex flex-col items-center">
-        <div className="items-center text-justify text-base">
-          <div className="text-gray-600 pt-4">
-            {!reviewed &&
-              <div className="">
-                <div
-                  class="text-center pt-16 sm:pt-32 font-extrabold text-transparent text-6xl sm:text-8xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue"
-                >
-                  Scrum Values Quiz
-                </div>
-                {!finished && !retaken && <p className="text-justify text-lg mt-6 leading-8">
+      <BrowserView className='text-gray-500 text-sm text-center'>
+        <div name="intro" className="flex flex-col justify-center">
+          <div class="pt-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
+            Scrum Values Quiz
+          </div>
+          <div className="grid grid-cols-2 items-center justify-center">
+            <div name="col-1" class="col-span-1">
+              <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={500} height={0} />
+            </div>
+
+            <div name="col-2">
+              {!retaken &&
+                <div className="col-span-1 text-justify text-lg mt-6 leading-8">
                   Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
                   The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
-                </p>}
-              </div>
-            }
+                </div>}
+              {reviewed &&
+                <div className="flex flex-col justify-center items-center text-lg">
+                  <p className="mt-4 text-left leading-8">
+                    Scrum is an empirical framework for iterative software development:
+                    <ul className="list-disc ml-4">
+                      <li> Based on <b>three pillars</b>: Transparency, Inspection, and Adaptation.</li>
+                      <li>
+                        Developed into <b>five values</b>: Courage, Focus, Commitment, Respect, and Openness.   </li>
+                    </ul>
+                  </p>
 
-            {reviewed &&
-              <div className="flex flex-col justify-center items-center">
-                <div
-                  class="text-center pt-6 sm:pt-32 font-extrabold text-transparent text-6xl sm:text-8xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue"
-                >
-                  Scrum Values Quiz
-                </div>
-
-                <div className="svg-image">
-                  <Image
-                    src="/assets/images/scrumpillars.svg"
-                    alt="scrum pillars"
-                    width={400}
-                    height={0}
-                  />
-                </div>
-
-                <p className="text-left text-m leading-8">
-                  An empirical framework for iterative software development:
-                  <ul className="list-disc ml-4">
-                    <li>
-                      Based on three pillars: Transparency, Inspection, and Adaptation.              </li>
-                    <li>
-                      Developed into five values: Courage, Focus, Commitment, Respect, and Openness.   </li>
-                  </ul>
-                </p>
-              </div>
-            }
-
-            {!finished &&
-              <div>
-                {!retaken && <div class="grid grid-cols-2">
-                  <div class="flex justify-start">
+                </div>}
+              {!finished && !retaken &&
+                <div name='buttons' className='grid grid-cols-5 font-[500]'>
+                  <div class="col-span-3 flex justify-start">
                     {!reviewed &&
                       <button
-                        className="my-4 w-[6rem] mr-2 h-10 text-vueBlue focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        onClick={handleReview}
-                      >
+                        className="w-[6rem] h-[2rem] my-4 mr-2  text-vueGreen"
+                        onClick={handleReview}>
                         Review
                       </button>}
 
-                    <a href="https://scrumguides.org/" target="_blank" className="my-4 flex items-center">
-                      <button
-                        className="justify-center h-10 w-[6rem] text-vueBlue bg-blue-200 focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        onClick={handleStart}
-                      >
-                        Explore
-                        <span className={`ml-2 w-4 h-4 transition-transform transform ${started ? 'rotate-90' : ''}`}>
-                          <FaSearch />
-                        </span>
-                      </button>
-                    </a>
+
+                    <button
+                      onClick={() => window.open('https://scrumguides.org/', '_blank')}
+                      className="rounded-lg w-[6rem] h-[2rem] px-5 my-4 mr-2  bg-vueGreen bg-opacity-30 flex justify-center items-center text-vueGreen"
+                    >
+                      Explore
+                      <span className={`ml-2 w-5 h-5`}>
+                        <FaSearch />
+                      </span>
+                    </button>
+
                   </div>
 
-                  <div className="flex justify-end">
+                  <div className="col-span-2 flex justify-end">
                     <button
-                      className={`my-4 w-[6rem] h-10 text-gray-600 justify-center bg-vueBlue hover:bg-gradient-to-br focus:ring-4 first-letter:focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${started ? 'arrow-transition' : ''}`}
+                      className={`my-4 w-[6rem] h-[2rem] justify-center bg-vueGreen hover:bg-gradient-to-br rounded-lg inline-flex items-center ${started ? 'arrow-transition' : ''}`}
                       onClick={handleStart}
                     >
                       <strong className="flex items-center text-white">
@@ -208,142 +288,171 @@ export default function UI() {
                       </strong>
                     </button>
                   </div>
-                </div>}
-              </div>
-            }
+                </div>
+              }
+            </div>
           </div>
+
 
         </div>
 
-      </div>
-      {
-        started &&
-        <div class="py-4">
-          <div class="">
-            {/* <div id="scrollspy1" className="sticky-top pl-3 text-sm overflow-x-auto" ref={quizRef}>
-              <ul data-te-nav-list-ref className="flex space-x-4 sm:space-y-4 justify-center">
-                {questions.map((question, index) => (
-                  <li className="pl-1 py-1 text-left" key={index} style={{ marginTop: 0 }}>
-                    <a
-                      data-te-nav-link-ref
-                      data-te-nav-link-active
-                      class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
-                      href={`#${question.key}`}
-                    >
-                      {question.key}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
-            {!finished && <div
-              // data-te-spy="scroll"
-              // data-te-target="#scrollspy1"
-              // data-te-offset="200"
-              // class="relative snap-y h-80 overflow-auto px-3"
-              class=""
-              ref={quizRef}
-            >
-              {questions.map((question, questionIndex) => (
-                questionNumber === questionIndex &&
-                <div id={question.key} className="snap-start" key={question.key}>
-                  <h1 className="py-2 text-2xl text-center font-bold tracking-tight text-gray-600 sm:text-2xl">
-                    {question.key}
-                  </h1>
-                  {question.value.map((option, optionIndex) => (
-                    <div className="">
-                      <div name="options" className="">
-                        <div className={`my-2 rounded-lg p-2 sm:hover:bg-vueBlue sm:hover:bg-opacity-30 ${result[questionIndex][optionIndex] ? 'bg-vueBlue bg-opacity-50' : 'bg-vueBlue bg-opacity-20'}`}>
-                          <label
-                            htmlFor={`${questionIndex}${optionIndex}-checkbox`}
-                            className="flex items-center cursor-pointer"
-                          >
-                            <input
-                              id={`${questionIndex}${optionIndex}-checkbox`}
-                              type="checkbox"
-                              className="w-0 h-0"
-                              checked={result[questionIndex][optionIndex] === true}
-                              onChange={() => handleChange(questionIndex, optionIndex)}
-                            />
-                            <span className="text-justify text-sm font-medium text-gray-600">
-                              {option}
-                            </span>
-                          </label>
-                          {/* <div className="h-[1px] bg-gray-400 bg-opacity-50"></div> */}
-                        </div>
+        {started &&
+          <div name="quiz" class="py-4">
+            {!finished && question}
 
-                      </div>
-                    </div>
+          </div>
+        }
 
-                  ))}
-                </div>
-              ))}
-              <div class="grid grid-cols-5 items-center text-sm text-gray-600">
-                <div class="flex col-span-1 justify-start">
-                  <button
-                    className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-                    onClick={handleBack}
-                  >
-                    <AiOutlineLeft width={10} height={10} />
-                  </button>
+        {finished &&
+          <div name="chart" class="grid grid-cols-5 items-center justify-center">
+            <div className="col-span-5 sm:col-span-4 flex justify-center w-full sm:h-[35rem]">
+              <Radar data={data} options={options} />
+            </div>
 
-                </div>
+            <div className="col-span-5 sm:col-span-1 text-sm">
+              Wasn't your best? Retake <br />
+              <button
+                className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+                onClick={handleReset}
+              >
+                <BsArrowCounterclockwise />
+              </button>
+            </div>
+          </div>
+        }
 
-                <div name="progress-bar" className="h-1 w-full bg-neutral-200 dark:bg-neutral-600 col-span-3">
-                  <div
-                    className="h-1 bg-primary transition-width duration-500"
-                    style={{ width: `${questionNumber * 20}%` }}
-                  ></div>
-                  <div className="my-1">
-                    {questionNumber}/5 completed
-                  </div>
-                </div>
+      </BrowserView>
 
-                <div className="flex col-span-1 justify-end">
-                  {questionNumber < 4 ?
-                    <button
-                      className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-                      onClick={handleNext}
-                    >
-                      <AiOutlineRight />
-                    </button>
-                    :
-                    <button
-                      className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-                      onClick={handleFinish}
-                    >
-                      <AiOutlineCheck />
-                    </button>
-                  }
-
-
-                </div>
+      <MobileView className='text-gray-500 text-sm text-center'>
+        <div name="intro" className="flex flex-col justify-center">
+          {!reviewed ?
+            <div className="">
+              <div class="pt-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
+                Scrum Values Quiz
               </div>
+              {!finished && !retaken && <p className="text-justify text-lg mt-6 leading-8">
+                Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
+                The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
+              </p>}
+            </div>
+            :
+            <div className="flex flex-col justify-center items-center">
+              <div class="pt-8 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
+                Scrum
+              </div>
+              <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={300} height={0} />
+              <p className="text-left leading-8">
+                Scrum is an empirical framework for iterative software development:
+                <ul className="list-disc ml-4">
+                  <li> Based on <b>three pillars</b>: Transparency, Inspection, and Adaptation.</li>
+                  <li>
+                    Developed into <b>five values</b>: Courage, Focus, Commitment, Respect, and Openness.   </li>
+                </ul>
+              </p>
             </div>}
 
-            <div class="border-t py-3"></div>
-          </div>
-        </div>
-      }
-      {
-        finished &&
-        <div class="grid grid-cols-5 items-center justify-center">
-          <div className="col-span-5 sm:col-span-4 flex justify-center w-full sm:h-[35rem]">
-            <Radar data={data} options={options} />
-          </div>
+          {!finished && !retaken &&
+            <div name='buttons' className='grid grid-cols-5 font-[500]'>
+              <div class="col-span-3 flex justify-start">
+                {!reviewed &&
+                  <button
+                    className="w-[6rem] h-8 my-4 mr-2  text-vueGreen"
+                    onClick={handleReview}>
+                    Review
+                  </button>}
 
-          <div className="col-span-5 sm:col-span-1 text-sm text-gray-600">
-            Wasn't your best? Retake <br />
-            <button
-              className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-              onClick={handleReset}
-            >
-              <BsArrowCounterclockwise />
-            </button>
-          </div>
+
+                <button
+                  onClick={() => window.open('https://scrumguides.org/', '_blank')}
+                  className="rounded-lg w-[6rem] h-8 px-5 my-4 mr-2  bg-vueGreen bg-opacity-30 flex justify-center items-center text-vueGreen"
+                >
+                  Explore
+                  <span className={`ml-2 w-5 h-5`}>
+                    <FaSearch />
+                  </span>
+                </button>
+
+              </div>
+
+              <div className="col-span-2 flex justify-end">
+                <button
+                  className={`my-4 w-[6rem] h-[2rem] justify-center bg-vueGreen hover:bg-gradient-to-br rounded-lg inline-flex items-center ${started ? 'arrow-transition' : ''}`}
+                  onClick={handleStart}
+                >
+                  <strong className="flex items-center text-white">
+                    Start
+                    <span className={`ml-2 w-4 h-4 transition-transform transform ${started ? 'rotate-90' : ''}`}>
+                      <BsArrowRight />
+                    </span>
+                  </strong>
+                </button>
+              </div>
+            </div>
+          }
+
 
         </div>
-      }
-    </div >
+
+        {started &&
+          <div name="quiz" class="py-4">
+            {!finished &&
+              <div name="questions" ref={quizRef}>
+                {questions.map((question, questionIndex) => (
+                  questionNumber === questionIndex &&
+                  <div id={question.key} className="snap-start" key={question.key}>
+                    <div name="question-title" className="py-2 text-2xl text-center font-bold tracking-tight sm:text-2xl">
+                      {question.key}
+                    </div>
+                    {question.value.map((option, optionIndex) => (
+                      <div className="">
+                        <div name="options" className="">
+                          <div className={`my-2 rounded-lg p-2 bg-vueGreen sm:hover:bg-vueBlue sm:hover:bg-opacity-30 ${result[questionIndex][optionIndex] ? 'bg-vueBlue bg-opacity-50' : 'bg-vueBlue bg-opacity-20'}`}>
+                            <label
+                              htmlFor={`${questionIndex}${optionIndex}-checkbox`}
+                              className="flex items-center cursor-pointer"
+                            >
+                              <input
+                                id={`${questionIndex}${optionIndex}-checkbox`}
+                                type="checkbox"
+                                className="w-0 h-0"
+                                checked={result[questionIndex][optionIndex] === true}
+                                onChange={() => handleChange(questionIndex, optionIndex)}
+                              />
+                              <span className="text-justify text-sm font-medium">
+                                {option}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+                {bottom}
+                <div class="border-t py-3"></div>
+              </div>}
+          </div>
+        }
+        {finished &&
+          <div name="chart" class="grid grid-cols-5 items-center justify-center">
+            <div className="col-span-5 sm:col-span-4 flex justify-center w-full sm:h-[35rem]">
+              <Radar data={data} options={options} />
+            </div>
+
+            <div className="col-span-5 sm:col-span-1 text-sm">
+              Wasn't your best? Retake <br />
+              <button
+                className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+                onClick={handleReset}
+              >
+                <BsArrowCounterclockwise />
+              </button>
+            </div>
+          </div>
+        }
+      </MobileView>
+    </div>
+
+
   )
 }

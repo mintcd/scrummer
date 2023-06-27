@@ -18,7 +18,10 @@ module.exports = {
         'primary-orange': '#FF5722',
         'vueGreen': '#42d392',
         'vueBlue': '#647eff',
-        'background': '#97C9CB'
+        'background': '#415DA2',
+        'silver': '#C0C0C0', // silver
+        'button': '#3399FF', //vibrant blue
+        'teal': '#008080'
       }
     },
   },

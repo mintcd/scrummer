@@ -13,7 +13,6 @@ export default function Home() {
       <Link href="/scrum-UI" className='flex gap-2 flex-center'>
         <p className='logo_text'> Checkout my new UIs </p>
       </Link>
-
     </section>
   )
 }
