@@ -136,7 +136,7 @@ export default function UI() {
   }
 
   // Reusable components
-  const bottom = <div name='bottom' class="grid grid-cols-5 justify-center items-center text-sm">
+  const bottom = <div name='bottom' class="grid grid-cols-5 justify-center items-center text-sm mb-[-1.5rem]">
     <div class="flex col-span-1 justify-start">
       <button
         className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
@@ -162,9 +162,6 @@ export default function UI() {
           backgroundColor: 'rgba(66, 211, 146, 0.5)',
         }}
       ></div>
-      <div className="taken">
-        {questionDone}/5 taken
-      </div>
     </div>
     <div className="flex col-span-1 justify-end">
       {questionNumber < 4 ?
@@ -218,6 +215,9 @@ export default function UI() {
       </div>
     ))}
     {bottom}
+    <div name="taken" className='col-span-5'>
+      {questionDone}/5 taken
+    </div>
     <div class="border-t py-3"></div>
   </div>
 
@@ -430,6 +430,7 @@ export default function UI() {
                   </div>
                 ))}
                 {bottom}
+
                 <div class="border-t py-3"></div>
               </div>}
           </div>
