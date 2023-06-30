@@ -267,9 +267,9 @@ export default function UI() {
     </div>
 
   return (
-    <div className='text-sm text-center'>
+    <div className='text-gray-500'>
       {open &&
-        <Dialog open={open} onClose={() => handleDialog(false)}>
+        <Dialog open={open} onClose={() => handleDialog(false)} className='text-sm text-center'>
           <DialogContent className="relative flex-auto p-4 text-gray-500" dividers>
             Finish quiz? <br /> Make sure to check all your cans!
           </DialogContent>
@@ -296,7 +296,7 @@ export default function UI() {
       </div>
 
       <BrowserView>
-        <div name="intro" className="flex flex-col justify-center">
+        <div name="intro" className="flex flex-col text-justify">
           {!retaken &&
             <div className="grid grid-cols-2 items-center justify-center">
               <div name="col-1" class="col-span-2 sm:col-span-1">
