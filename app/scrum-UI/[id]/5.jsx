@@ -3,19 +3,20 @@
 import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 
 import { useState, useEffect, useRef } from "react";
-import { Scrollspy, initTE } from "tw-elements";
+import { Scrollspy, Modal, Ripple, initTE } from "tw-elements";
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import questions from '@models/questions'
 import Image from 'next/image'
 import { BsArrowRight, BsArrowCounterclockwise } from 'react-icons/bs'
 import { FaSearch } from 'react-icons/fa';
-import { AiOutlineRight, AiOutlineLeft, AiOutlineCheck } from 'react-icons/ai'
+import { AiOutlineRight, AiOutlineLeft, AiOutlineCheck, AiOutlineHome } from 'react-icons/ai'
 
 import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, Colors } from 'chart.js'
 import { Radar } from 'react-chartjs-2';
 
 export default function UI() {
   useEffect(() => {
-    initTE({ Scrollspy });
+    initTE({ Scrollspy, Modal, Ripple });
     ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
   }, [])
 
@@ -32,6 +33,7 @@ export default function UI() {
   );
   const [finished, setFinished] = useState(false)
   const [retaken, setRetaken] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const getArea = () => {
     const points = result.map((answer) => answer.filter((option) => option === true).length)
@@ -108,11 +110,6 @@ export default function UI() {
     setQuestionDone(questionDone + Number(questionNumber >= questionDone))
   }
 
-  function handleFinish() {
-    const shouldFinish = window.confirm('Are you sure you want to finish?')
-    if (shouldFinish) setFinished(true)
-  }
-
   function handleBack() {
     let newResult = [...result]
     newResult[questionNumber - 1] = [false, false, false, false, false]
@@ -126,7 +123,17 @@ export default function UI() {
     setQuestionDone(questionDone + Number(questionNumber >= questionDone))
   }
 
-  function handleReset() {
+  const handleFinish = () => {
+    if (!retaken) setOpen(true)
+    else setFinished(true)
+  };
+
+  function handleDialog(confirmed) {
+    if (confirmed) setFinished(true);
+    setOpen(false);
+  }
+
+  function handleRetake() {
     setQuestionNumber(0)
     setReviewed(false)
     setResult(Array(5).fill().map(() => Array(5).fill(false)));
@@ -135,109 +142,170 @@ export default function UI() {
     setRetaken(true)
   }
 
-  // Reusable components
-  const bottom = <div name='bottom' class="grid grid-cols-5 justify-center items-center text-sm mb-[-1.5rem]">
-    <div class="flex col-span-1 justify-start">
-      <button
-        className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-        onClick={handleBack}
-      >
-        <AiOutlineLeft width={10} height={10} />
-      </button>
+  function handleReset() {
+    setQuestionNumber(0)
+    setReviewed(false)
+    setResult(Array(5).fill().map(() => Array(5).fill(false)));
+    setQuestionDone(0)
+    setFinished(false)
+    setStarted(false)
+    setRetaken(false)
+  }
 
-    </div>
-
-    <div name="progress-bar" className="w-full col-span-3">
-      <div
-        className="h-2 transition-width duration-500"
-        style={{
-          width: `${questionDone * 20}%`,
-          backgroundColor: 'rgba(66, 211, 146, 0.3)',
-        }}
-      ></div>
-      <div
-        className="h-2 bg-vueGreen transition-width duration-500"
-        style={{
-          width: `${(questionNumber + 1) * 20}%`,
-          backgroundColor: 'rgba(66, 211, 146, 0.5)',
-        }}
-      ></div>
-    </div>
-    <div className="flex col-span-1 justify-end">
-      {questionNumber < 4 ?
-        <button
-          className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-          onClick={handleNext}
-        >
-          <AiOutlineRight />
-        </button>
-        :
-        <button
-          className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-          onClick={handleFinish}
-        >
-          <AiOutlineCheck />
-        </button>
-      }
-    </div>
-  </div>
-
-  const question = <div name="questions" ref={quizRef}>
-    {questions.map((question, questionIndex) => (
-      questionNumber === questionIndex &&
-      <div id={question.key} className="snap-start" key={question.key}>
-        <div name="question-title" className="py-2 text-2xl text-center font-bold tracking-tight sm:text-2xl">
-          {question.key}
-        </div>
-        {question.value.map((option, optionIndex) => (
-          <div className="">
-            <div name="options" className="">
-              <div className={`my-2 rounded-lg p-2 bg-vueGreen sm:hover:bg-vueBlue sm:hover:bg-opacity-30 ${result[questionIndex][optionIndex] ? 'bg-vueBlue bg-opacity-50' : 'bg-vueBlue bg-opacity-20'}`}>
-                <label
-                  htmlFor={`${questionIndex}${optionIndex}-checkbox`}
-                  className="flex items-center cursor-pointer"
-                >
-                  <input
-                    id={`${questionIndex}${optionIndex}-checkbox`}
-                    type="checkbox"
-                    className="w-0 h-0"
-                    checked={result[questionIndex][optionIndex] === true}
-                    onChange={() => handleChange(questionIndex, optionIndex)}
-                  />
-                  <span className="text-justify text-sm font-medium">
-                    {option}
-                  </span>
-                </label>
+  const question =
+    <div name="questions" className="sm:w-[80%] justify-center items-center" ref={quizRef}>
+      {questions.map((question, questionIndex) => (
+        questionNumber === questionIndex &&
+        <div id={question.key} className="snap-start" key={question.key}>
+          <div name="question-title" className="py-2 text-2xl font-bold tracking-tight text-left">
+            {question.key}
+          </div>
+          {question.value.map((option, optionIndex) => (
+            <div className="">
+              <div name="options" className="">
+                <div className={`my-2 rounded-lg p-2 bg-vueGreen sm:hover:bg-vueBlue sm:hover:bg-opacity-30 ${result[questionIndex][optionIndex] ? 'bg-vueBlue bg-opacity-50' : 'bg-vueBlue bg-opacity-20'}`}>
+                  <label
+                    htmlFor={`${questionIndex}${optionIndex}-checkbox`}
+                    className="flex items-center cursor-pointer"
+                  >
+                    <input
+                      id={`${questionIndex}${optionIndex}-checkbox`}
+                      type="checkbox"
+                      className="w-0 h-0"
+                      checked={result[questionIndex][optionIndex] === true}
+                      onChange={() => handleChange(questionIndex, optionIndex)}
+                    />
+                    <span className="text-justify text-sm font-medium">
+                      {option}
+                    </span>
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-    ))}
-    {bottom}
-    <div name="taken" className='col-span-5'>
-      {questionDone}/5 taken
-    </div>
-    <div class="border-t py-3"></div>
-  </div>
+          ))}
+        </div>
+      ))}
+      <div name='bottom' class="grid grid-cols-5 justify-center items-center text-sm mb-[-1.5rem]">
+        <div name="back" class="flex col-span-1 justify-start">
+          <button
+            className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2] bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+            onClick={handleBack}
+          >
+            <AiOutlineLeft width={10} height={10} />
+          </button>
 
+        </div>
+
+        <div name="progress-bar" className="w-full col-span-3">
+          <div
+            className="h-2 transition-width duration-500"
+            style={{
+              width: `${questionDone * 20}%`,
+              backgroundColor: 'rgba(66, 211, 146, 0.3)',
+            }}
+          ></div>
+          <div
+            className="h-2 bg-vueGreen transition-width duration-500"
+            style={{
+              width: `${(questionNumber + 1) * 20}%`,
+              backgroundColor: 'rgba(66, 211, 146, 0.5)',
+            }}
+          ></div>
+        </div>
+
+        <div className="flex col-span-1 justify-end">
+          {questionNumber < 4 ?
+            <button
+              name="next"
+              className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2] bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+              onClick={handleNext}
+            >
+              <AiOutlineRight />
+            </button>
+            :
+            <button
+              name="finish"
+              className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2] bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+              onClick={handleFinish}
+            >
+              <AiOutlineCheck />
+            </button>
+
+          }
+        </div>
+      </div>
+      <div name="taken" className='col-span-5'>
+        {questionDone}/5 taken
+      </div>
+      <div class="border-t py-3"></div>
+      {retaken &&
+        <button
+          name="home"
+          className={`mb-4 w-12 h-12 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+          onClick={handleReset}
+        >
+          <AiOutlineHome />
+        </button>}
+    </div>
+
+  const chart =
+    <div name="chart" class="grid grid-cols-5 items-center justify-center">
+      <div className="col-span-5 sm:col-span-4 flex justify-center w-full sm:h-[35rem]">
+        <Radar data={data} options={options} />
+      </div>
+
+      <div className="col-span-5 sm:col-span-1 text-sm">
+        Wasn't your best? Retake <br />
+        <button
+          name="retake"
+          className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2] bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
+          onClick={handleRetake}
+        >
+          <BsArrowCounterclockwise />
+        </button>
+      </div>
+    </div>
 
   return (
-    <div>
-      <BrowserView className='text-gray-500 text-sm text-center'>
+    <div className='text-sm text-center'>
+      {open &&
+        <Dialog open={open} onClose={() => handleDialog(false)}>
+          <DialogContent className="relative flex-auto p-4 text-gray-500" dividers>
+            Finish quiz? <br /> Make sure to check all your cans!
+          </DialogContent>
+
+          <DialogActions className="flex flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+            <button
+              onClick={() => handleDialog(false)}
+              className='w-[6rem] h-[2rem] justify-center items-center hover:bg-gradient-to-br rounded-lg inline-flex text-[#5d91e7] '
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => handleDialog(true)}
+              className='w-[6rem] h-[2rem] rounded-lg justify-center items-center bg-middlegreen hover:bg-gradient-to-br  text-white'
+              variant="contained"
+            >
+              Confirm
+            </button>
+          </DialogActions>
+        </Dialog>}
+
+      <div class="pt-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
+        Scrum Values Quiz
+      </div>
+
+      <BrowserView>
         <div name="intro" className="flex flex-col justify-center">
-          <div class="pt-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
-            Scrum Values Quiz
-          </div>
           {!retaken &&
             <div className="grid grid-cols-2 items-center justify-center">
-              <div name="col-1" class="col-span-1">
+              <div name="col-1" class="col-span-2 sm:col-span-1">
                 <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={500} height={0} />
               </div>
 
               <div name="col-2">
                 {
-                  <div className="col-span-1 text-justify text-lg mt-6 leading-8">
+                  <div className="col-span-2 sm:col-span-1text-justify text-lg mt-6 leading-8">
                     Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
                     The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
                   </div>}
@@ -258,7 +326,7 @@ export default function UI() {
                     <div class="col-span-3 flex justify-start">
                       {!reviewed &&
                         <button
-                          className="w-[6rem] h-[2rem] my-4 mr-2  text-vueGreen"
+                          className="w-[6rem] h-[2rem] my-4 mr-2  text-[#5d91e7]"
                           onClick={handleReview}>
                           Review
                         </button>}
@@ -266,7 +334,7 @@ export default function UI() {
 
                       <button
                         onClick={() => window.open('https://scrumguides.org/', '_blank')}
-                        className="rounded-lg w-[6rem] h-[2rem] px-5 my-4 mr-2  bg-vueGreen bg-opacity-30 flex justify-center items-center text-vueGreen"
+                        className="rounded-lg w-[6rem] h-[2rem] px-5 my-4 mr-2  bg-middlegreen bg-opacity-30 flex justify-center items-center text-[#4cb8b4]"
                       >
                         Explore
                         <span className={`ml-2 w-5 h-5`}>
@@ -278,7 +346,7 @@ export default function UI() {
 
                     <div className="col-span-2 flex justify-end">
                       <button
-                        className={`my-4 w-[6rem] h-[2rem] justify-center bg-vueGreen hover:bg-gradient-to-br rounded-lg inline-flex items-center ${started ? 'arrow-transition' : ''}`}
+                        className={`my-4 w-[6rem] h-[2rem] justify-center bg-middlegreen hover:bg-gradient-to-br rounded-lg inline-flex items-center ${started ? 'arrow-transition' : ''}`}
                         onClick={handleStart}
                       >
                         <strong className="flex items-center text-white">
@@ -293,44 +361,22 @@ export default function UI() {
                 }
               </div>
             </div>}
-
-
         </div>
 
         {started &&
-          <div name="quiz" class="py-4">
+          <div name="quiz" className="py-4 flex flex-col items-center">
             {!finished && question}
 
           </div>
         }
 
-        {finished &&
-          <div name="chart" class="grid grid-cols-5 items-center justify-center">
-            <div className="col-span-5 sm:col-span-4 flex justify-center w-full sm:h-[35rem]">
-              <Radar data={data} options={options} />
-            </div>
-
-            <div className="col-span-5 sm:col-span-1 text-sm">
-              Wasn't your best? Retake <br />
-              <button
-                className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-                onClick={handleReset}
-              >
-                <BsArrowCounterclockwise />
-              </button>
-            </div>
-          </div>
-        }
-
+        {finished && chart}
       </BrowserView>
 
       <MobileView className='text-gray-500 text-sm text-center'>
         <div name="intro" className="flex flex-col justify-center">
           {!reviewed ?
             <div className="">
-              <div class="pt-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
-                Scrum Values Quiz
-              </div>
               {!finished && !retaken && <p className="text-justify text-lg mt-6 leading-8">
                 Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
                 The quiz will gauge your understanding of Scrum by measuring the number of exemplary behaviors you exhibit corresponding to each Scrum value. <br />
@@ -338,9 +384,6 @@ export default function UI() {
             </div>
             :
             <div className="flex flex-col justify-center items-center">
-              <div class="pt-8 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
-                Scrum
-              </div>
               <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={300} height={0} />
               <p className="text-left leading-8">
                 Scrum is an empirical framework for iterative software development:
@@ -361,8 +404,6 @@ export default function UI() {
                     onClick={handleReview}>
                     Review
                   </button>}
-
-
                 <button
                   onClick={() => window.open('https://scrumguides.org/', '_blank')}
                   className="rounded-lg w-[6rem] h-8 px-5 my-4 mr-2  bg-vueGreen bg-opacity-30 flex justify-center items-center text-vueGreen"
@@ -372,12 +413,11 @@ export default function UI() {
                     <FaSearch />
                   </span>
                 </button>
-
               </div>
 
               <div className="col-span-2 flex justify-end">
                 <button
-                  className={`my-4 w-[6rem] h-[2rem] justify-center bg-vueGreen hover:bg-gradient-to-br rounded-lg inline-flex items-center ${started ? 'arrow-transition' : ''}`}
+                  className={`my-4 w-[6rem] h-[2rem] justify-center bg-middlegreen hover:bg-gradient-to-br rounded-lg inline-flex items-center ${started ? 'arrow-transition' : ''}`}
                   onClick={handleStart}
                 >
                   <strong className="flex items-center text-white">
@@ -394,64 +434,8 @@ export default function UI() {
 
         </div>
 
-        {started &&
-          <div name="quiz" class="py-4">
-            {!finished &&
-              <div name="questions" ref={quizRef}>
-                {questions.map((question, questionIndex) => (
-                  questionNumber === questionIndex &&
-                  <div id={question.key} className="snap-start" key={question.key}>
-                    <div name="question-title" className="py-2 text-2xl text-center font-bold tracking-tight sm:text-2xl">
-                      {question.key}
-                    </div>
-                    {question.value.map((option, optionIndex) => (
-                      <div className="">
-                        <div name="options" className="">
-                          <div className={`my-2 rounded-lg p-2 bg-vueGreen sm:hover:bg-vueBlue sm:hover:bg-opacity-30 ${result[questionIndex][optionIndex] ? 'bg-vueBlue bg-opacity-50' : 'bg-vueBlue bg-opacity-20'}`}>
-                            <label
-                              htmlFor={`${questionIndex}${optionIndex}-checkbox`}
-                              className="flex items-center cursor-pointer"
-                            >
-                              <input
-                                id={`${questionIndex}${optionIndex}-checkbox`}
-                                type="checkbox"
-                                className="w-0 h-0"
-                                checked={result[questionIndex][optionIndex] === true}
-                                onChange={() => handleChange(questionIndex, optionIndex)}
-                              />
-                              <span className="text-justify text-sm font-medium">
-                                {option}
-                              </span>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-                {bottom}
-
-                <div class="border-t py-3"></div>
-              </div>}
-          </div>
-        }
-        {finished &&
-          <div name="chart" class="grid grid-cols-5 items-center justify-center">
-            <div className="col-span-5 sm:col-span-4 flex justify-center w-full sm:h-[35rem]">
-              <Radar data={data} options={options} />
-            </div>
-
-            <div className="col-span-5 sm:col-span-1 text-sm">
-              Wasn't your best? Retake <br />
-              <button
-                className={`my-4 w-10 h-10 text-white text-xl justify-center bg-vueBlue bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-                onClick={handleReset}
-              >
-                <BsArrowCounterclockwise />
-              </button>
-            </div>
-          </div>
-        }
+        {started && !finished && question}
+        {finished && chart}
       </MobileView>
     </div>
 

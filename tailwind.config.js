@@ -21,7 +21,8 @@ module.exports = {
         'background': '#415DA2',
         'silver': '#C0C0C0', // silver
         'button': '#3399FF', //vibrant blue
-        'teal': '#008080'
+        'teal': '#008080',
+        'middlegreen': '#4cb8b4'
       }
     },
   },
