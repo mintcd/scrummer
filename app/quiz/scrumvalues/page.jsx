@@ -185,8 +185,8 @@ export default function UI() {
           ))}
         </div>
       ))}
-      <div name='bottom' class="grid grid-cols-5 justify-center items-center text-sm mb-[-1.5rem]">
-        <div name="back" class="flex col-span-1 justify-start">
+      <div name='bottom' className="mb-[-1.5rem] grid grid-cols-5 justify-center items-center text-sm">
+        <div name="back" className="flex col-span-1 justify-start">
           <button
             className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2] bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
             onClick={handleBack}
@@ -237,7 +237,7 @@ export default function UI() {
       <div name="taken" className='col-span-5'>
         {questionDone}/5 taken
       </div>
-      <div class="border-t py-3"></div>
+      <div className="border-t py-3"></div>
       {retaken &&
         <button
           name="home"
@@ -249,49 +249,36 @@ export default function UI() {
     </div>
 
   const chart =
-    <div name="chart" class="grid grid-cols-5 items-center justify-center">
-      <div className="col-span-5 sm:col-span-4 flex justify-center w-full sm:h-[35rem]">
-        <Radar data={data} options={options} />
-      </div>
-
-      <div className="col-span-5 sm:col-span-1 text-sm">
-        Wasn't your best? Retake <br />
-        <button
-          name="retake"
-          className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2] bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
-          onClick={handleRetake}
-        >
-          <BsArrowCounterclockwise />
-        </button>
-      </div>
+    <div name="chart" className="grid grid-cols-5 items-center justify-center">
+      <Radar data={data} options={options} />
     </div>
 
   return (
-    <div className='text-gray-500'>
+    <div className='text-gray-500 text-center'>
       {open &&
-        <Dialog open={open} onClose={() => handleDialog(false)} className='text-sm text-center'>
-          <DialogContent className="relative flex-auto p-4 text-gray-500" dividers>
-            Finish quiz? <br /> Make sure to check all your cans!
+        <Dialog open={open} onClose={() => handleDialog(false)} className='text-sm text-gray-500'>
+          <DialogTitle> Confirm </DialogTitle>
+          <DialogContent className="relative p-4 text-justify" dividers>
+            Make sure your options match your how you work
           </DialogContent>
-
           <DialogActions className="flex flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
             <button
               onClick={() => handleDialog(false)}
               className='w-[6rem] h-[2rem] justify-center items-center hover:bg-gradient-to-br rounded-lg inline-flex text-[#5d91e7] '
             >
-              Cancel
+              No
             </button>
             <button
               onClick={() => handleDialog(true)}
               className='w-[6rem] h-[2rem] rounded-lg justify-center items-center bg-middlegreen hover:bg-gradient-to-br  text-white'
               variant="contained"
             >
-              Confirm
+              Yes
             </button>
           </DialogActions>
         </Dialog>}
 
-      <div class="pt-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
+      <div className="pt-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
         Scrum Values Quiz
       </div>
 
@@ -299,7 +286,7 @@ export default function UI() {
         <div name="intro" className="flex flex-col text-justify">
           {!retaken &&
             <div className="grid grid-cols-2 items-center justify-center">
-              <div name="col-1" class="col-span-2 sm:col-span-1">
+              <div name="col-1" className="col-span-2 sm:col-span-1">
                 <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={500} height={0} />
               </div>
 
@@ -323,7 +310,7 @@ export default function UI() {
                   </div>}
                 {!finished && !retaken &&
                   <div name='buttons' className='grid grid-cols-5 font-[500]'>
-                    <div class="col-span-3 flex justify-start">
+                    <div className="col-span-3 flex justify-start">
                       {!reviewed &&
                         <button
                           className="w-[6rem] h-[2rem] my-4 mr-2  text-[#5d91e7]"
@@ -373,7 +360,7 @@ export default function UI() {
         {finished && chart}
       </BrowserView>
 
-      <MobileView className='text-gray-500 text-sm text-center'>
+      <MobileView className='text-gray-500 text-sm'>
         <div name="intro" className="flex flex-col justify-center">
           {!reviewed ?
             <div className="">
@@ -397,7 +384,7 @@ export default function UI() {
 
           {!finished && !retaken &&
             <div name='buttons' className='grid grid-cols-5 font-[500]'>
-              <div class="col-span-3 flex justify-start">
+              <div className="col-span-3 flex justify-start">
                 {!reviewed &&
                   <button
                     className="w-[6rem] h-8 my-4 mr-2  text-vueGreen"

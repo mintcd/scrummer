@@ -131,8 +131,8 @@ export default function UI() {
         </div>
       </div>
       {started &&
-        <div class="grid grid-cols-5 py-8">
-          <div class="col-span-5 sm:col-span-3">
+        <div className="grid grid-cols-5 py-8">
+          <div className="col-span-5 sm:col-span-3">
             <div id="scrollspy1" className="sticky-top pl-3 text-sm overflow-x-auto" ref={quizRef}>
               <ul data-te-nav-list-ref className="flex space-x-4 sm:space-y-4 justify-center">
                 {questions.map((question, index) => (
@@ -140,7 +140,7 @@ export default function UI() {
                     <a
                       data-te-nav-link-ref
                       data-te-nav-link-active
-                      class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
+                      className="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
                       href={`#${question.key}`}
                     >
                       {question.key}
@@ -153,7 +153,7 @@ export default function UI() {
               data-te-spy="scroll"
               data-te-target="#scrollspy1"
               data-te-offset="200"
-              class="relative snap-y h-80 overflow-auto px-3"
+              className="relative snap-y h-80 overflow-auto px-3"
             >
               {questions.map((question, questionIndex) => (
                 <div id={question.key} className="snap-start" key={question.key}>
@@ -186,7 +186,7 @@ export default function UI() {
               ))}
             </div>
           </div>
-          <div class="col-span-5 sm:col-span-2">
+          <div className="col-span-5 sm:col-span-2">
             <Radar data={data} options={options} />
             <div className="text-gray-600 text-sm"> Occupied area: {getArea()}%  </div>
             <div className="text-gray-600 text-sm"> Have you seen "achieving more from more achieved" is more valueable? </div>

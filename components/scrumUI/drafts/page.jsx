@@ -1,10 +1,10 @@
 'use client'
 // Components
-import UI1 from '@app/scrum-UI/[id]/1'
+import UI1 from '@components/scrumUI/drafts/1'
 import UI2 from '@app/scrum-UI/[id]/2'
 import UI3 from '@app/scrum-UI/[id]/3'
 import UI4 from '@app/scrum-UI/[id]/4'
-import UI5 from '@app/scrum-UI/[id]/5'
+import UI5 from '@app/quiz/scrumvalues/page'
 import UINavigation from '@components/scrumUI/UInav'
 
 

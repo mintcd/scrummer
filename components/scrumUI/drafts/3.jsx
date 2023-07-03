@@ -134,7 +134,7 @@ export default function UI() {
             Scrum Values Quiz
           </h1>
           {!finished ?
-            <div class="grid grid-cols-3">
+            <div className="grid grid-cols-3">
               <div className="col-span-3 sm:col-span-1">
                 <div id="scrollspy1" className="sticky-top pl-3 text-sm overflow-x-auto">
                   <ul data-te-nav-list-ref className="flex sm:flex-col space-x-4 sm:space-y-4 justify-center">
@@ -143,7 +143,7 @@ export default function UI() {
                         <a
                           data-te-nav-link-ref
                           data-te-nav-link-active
-                          class="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
+                          className="bg-transparent px-[5px] text-neutral-600 shadow-none dark:text-neutral-200"
                           href={`#${question.key}`}
                         >
                           {question.key}
@@ -154,7 +154,7 @@ export default function UI() {
                       <a
                         data-te-nav-link-ref
                         data-te-nav-link-active={activeSpyee === 'Finish'}  // Apply bold styling if activeSpyee is "Finish"
-                        className={`bg-transparent px-1 text-neutral-600 shadow-none dark:text-neutral-200 ${activeSpyee === 'Finish' ? 'font-bold' : ''}`}  // Add font-bold class
+                        className={`bg-transparent px-1 text-neutral-600 shadow-none dark:text-neutral-200 ${activeSpyee === 'Finish' ? 'font-bold' : ''}`}  // Add font-bold className
                         href={`#Finish`}
                       >
                         Finish
@@ -165,12 +165,12 @@ export default function UI() {
               </div>
 
 
-              <div class="col-span-3 sm:col-span-2">
+              <div className="col-span-3 sm:col-span-2">
                 <div
                   data-te-spy="scroll"
                   data-te-target="#scrollspy1"
                   data-te-offset="200"
-                  class="relative snap-y h-80 overflow-auto">
+                  className="relative snap-y h-80 overflow-auto">
                   {questions.map((question, questionIndex) => (
                     <div id={question.key} className="snap-start" key={question.key}>
                       <h1 className="py-4 text-2xl text-center font-bold tracking-tight text-gray-900 sm:text-2xl">
