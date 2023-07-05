@@ -3,5 +3,6 @@ import { activateUser } from "@controllers/database";
 
 export async function GET(req: Request) {
   const token = req.url.slice(req.url.lastIndexOf('/') + 1)
-  activateUser(token);
+  // activateUser(token);
+  return NextResponse.json(`Activation ${token} comming soon...`)
 }
