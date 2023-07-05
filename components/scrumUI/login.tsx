@@ -1,153 +1,182 @@
-import { dividerClasses } from '@mui/material';
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react'
+import { AiOutlineBulb } from 'react-icons/ai'
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+
 
 export default function Login() {
-  const [info, setInfo] = useState({
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+
+  const [signinInfo, setSigninInfo] = useState({
     usernameOrEmail: '',
     password: '',
   });
-  const [signuped, setSignuped] = useState(false);
 
-  function handleChangeInfo(e) {
+  const [signupInfo, setSignupInfo] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const [signuped, setSignuped] = useState(false);
+  const [open, setOpen] = useState(false);
+
+
+  function handleChangeSignin(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    setInfo((prevState) => ({
+    setSigninInfo((prevState) => ({
       ...prevState,
       [name]: value,
     }));
-    console.log(info.password)
+  }
+
+  function handleChangeSignup(e: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setSignupInfo((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+
+  function handleConfirmSignin() {
+    console.log(signinInfo)
   }
 
   function handleSignup() {
-    setSignuped(true)
+    setOpen(true)
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    // Here you can perform any action with the form data, like making an API call for login.
-    console.log('Form submitted with:', info);
+  function handleConfirmSignup(bool: Boolean, e: React.FormEvent) {
+    if (bool) {
+      fetch("/api/signup", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(signupInfo)
+      })
+        .then(response => {
+          console.log(response.json())
+        }
+        )
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+      setOpen(false)
+    }
+    else setOpen(false)
+
   }
+
 
   return (
-    <div className="grid grid-cols-2 text-center">
+    <div className="my-32 grid grid-cols-2 justify-center text-gray-600 text-center">
       <div className="mr-8">
         <div className="mt-32 h-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
           Scrummer
         </div>
-        <div className="h-32 text-xl">
+        <div className="my-8 text-xl">
           Your assistant to learn Scrum and master applying in work.
         </div>
+
+        <a
+          href="https://scrumguides.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className='text-center'
+        >
+          <span>
+            <div className='flex justify-center text-4xl text-middlegreen text-center'>
+              <AiOutlineBulb />
+            </div>
+
+            <div> Take a travel in Scrum </div>
+          </span>
+        </a>
       </div>
-      <form className="w-full max-w-sm mt-32" onSubmit={handleSubmit}>
-
-
-        {!signuped ?
-          <div >
-            <div about="inputs">
-              <input
-                className="my-2 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                id="inline-full-name"
-                type="text"
-                name="usernameOrEmail"
-                placeholder="Username or email address"
-                onChange={handleChangeInfo}
-                value={info.usernameOrEmail}
-              />
-              <input
-                className="my-2 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                type="password"
-                name="password"
-                onChange={handleChangeInfo}
-                placeholder="Password"
-                value={info.password}
-              />
-            </div>
-            <div id="buttons" className='flex justify-end'>
-
-              <button
-                className="my-2 shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-                type="submit" // Assuming this button is inside a form and it should trigger a form submission
-              >
-                Signin
-              </button>
-
-              <button
-                className="my-2 ml-4 underline text-purple-500"
-                onClick={handleSignup}
-              >
-                Create an account
-              </button>
-            </div>
+      <div className="w-full ml-8 max-w-sm mt-32">
+        <div >
+          <div about="inputs">
+            <input
+              className="my-2 bg-gray-100 appearance-none border-2 border-gray-100 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-[#56a2d2]"
+              name="usernameOrEmail"
+              id="loginUsernameOrEmail"
+              type="text"
+              placeholder="Username or email address"
+              onChange={(e) => handleChangeSignin(e)}
+              value={signinInfo.usernameOrEmail}
+            />
+            <input
+              className="my-2 bg-gray-100 appearance-none border-2 border-gray-100 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-[#56a2d2]"
+              type="password"
+              name="password" // Updated name here
+              onChange={(e) => handleChangeSignin(e)}
+              placeholder="Password"
+              value={signinInfo.password}
+            />
           </div>
-          :
-          <div >
-            <div about="inputs">
-              <input
-                className="my-2 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                id="inline-full-name"
-                type="text"
-                name="usernameOrEmail"
-                placeholder="Email"
-                onChange={handleChangeInfo}
-                value={info.usernameOrEmail}
-              />
-              <input
-                className="my-2 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                id="inline-full-name"
-                type="text"
-                name="usernameOrEmail"
-                placeholder="Username"
-                onChange={handleChangeInfo}
-                value={info.usernameOrEmail}
-              />
-              <input
-                className="my-2 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                type="password"
-                name="password"
-                onChange={handleChangeInfo}
-                placeholder="Password"
-                value={info.password}
-              />
-            </div>
-            <div className='flex'>
-              <button id="dropdownHoverButton"
-                data-dropdown-toggle="dropdownHover"
-                data-dropdown-trigger="hover"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                Dropdown hover
-                <svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div id="dropdownHover" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
-                  <li>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                  </li>
-                  <li>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                  </li>
-                  <li>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                  </li>
-                  <li>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-                  </li>
-                </ul>
-              </div>
+          <div id="buttons" className='flex justify-end'>
 
-            </div>
-            <div className='flex justify-end'>
+            <button
+              className="my-2 shadow bg-[#56a2d2] hover:opacity-40 text-white font-bold py-2 px-4 rounded"
+              onClick={handleConfirmSignin}
+            >
+              Signin
+            </button>
+
+            <button
+              className="my-2 ml-4 underline text-[#56a2d2]"
+              onClick={handleSignup}
+            >
+              Create an account
+            </button>
+          </div>
+        </div>
+
+        <Dialog className="" open={open}
+          onClose={(reason: "backdropClick" | "escapeKeyDown") => handleConfirmSignup(false, null)}
+        >
+          <form className="flex flex-col justify-center items-center">
+            <DialogContent dividers>
+              <input
+                className="my-2 bg-gray-100 appearance-none border-2 border-gray-100 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-[#56a2d2]"
+                type="text"
+                name="email"
+                placeholder="Email"
+                onChange={(e) => handleChangeSignup(e)}
+                value={signupInfo.email}
+              />
+              <input
+                className="my-2 bg-gray-100 appearance-none border-2 border-gray-100 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-[#56a2d2]"
+                type="text"
+                name="username"
+                placeholder="Username"
+                onChange={(e) => handleChangeSignup(e)}
+                value={signupInfo.username}
+              />
+              <input
+                className="my-2 bg-gray-100 appearance-none border-2 border-gray-100 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-[#56a2d2]"
+                type="password"
+                name="password" // Updated name here
+                placeholder="password"
+                onChange={(e) => handleChangeSignup(e)}
+                value={signupInfo.password}
+              />
+            </DialogContent>
+            <DialogActions className='w-full'>
               <button
-                className="my-2 shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-                type="submit" // Assuming this button is inside a form and it should trigger a form submission
+                type="button"
+                className="py-2 rounded px-4 w-full shadow bg-[#56a2d2] hover:opacity-50 focus:shadow-outline focus:outline-none text-white font-bold "
+                onClick={(e) => handleConfirmSignup(true, e)}
               >
                 Signup
               </button>
-            </div>
+            </DialogActions>
+          </form>
+        </Dialog>
 
-          </div>
-        }
 
-      </form>
+      </div>
     </div>
   );
 }
