@@ -3,7 +3,6 @@
 import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 
 import { useState, useEffect, useRef } from "react";
-import { Scrollspy, Modal, Ripple, initTE } from "tw-elements";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import questions from '@models/questions'
 import Image from 'next/image'
@@ -15,11 +14,6 @@ import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler,
 import { Radar } from 'react-chartjs-2';
 
 export default function UI() {
-  useEffect(() => {
-    initTE({ Scrollspy, Modal, Ripple });
-    ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
-  }, [])
-
   const maxArea = 59.44103
 
   // Hooks
@@ -29,7 +23,7 @@ export default function UI() {
   const [reviewed, setReviewed] = useState(false)
   const [started, setStarted] = useState(false)
   const [result, setResult] = useState(() =>
-    Array(5).fill().map(() => Array(5).fill(false))
+    Array(5).fill(0).map(() => Array(5).fill(false))
   );
   const [finished, setFinished] = useState(false)
   const [retaken, setRetaken] = useState(false)
@@ -136,7 +130,7 @@ export default function UI() {
   function handleRetake() {
     setQuestionNumber(0)
     setReviewed(false)
-    setResult(Array(5).fill().map(() => Array(5).fill(false)));
+    setResult(Array(5).fill(0).map(() => Array(5).fill(false)));
     setQuestionDone(0)
     setFinished(false)
     setRetaken(true)
@@ -145,7 +139,7 @@ export default function UI() {
   function handleReset() {
     setQuestionNumber(0)
     setReviewed(false)
-    setResult(Array(5).fill().map(() => Array(5).fill(false)));
+    setResult(Array(5).fill(0).map(() => Array(5).fill(false)));
     setQuestionDone(0)
     setFinished(false)
     setStarted(false)
@@ -153,16 +147,16 @@ export default function UI() {
   }
 
   const question =
-    <div name="questions" className="sm:w-[80%] justify-center items-center" ref={quizRef}>
+    <div about="questions" className="sm:w-[80%] justify-center items-center" ref={quizRef}>
       {questions.map((question, questionIndex) => (
         questionNumber === questionIndex &&
         <div id={question.key} className="snap-start" key={question.key}>
-          <div name="question-title" className="py-2 text-2xl font-bold tracking-tight text-left">
+          <div about="question-title" className="py-2 text-2xl font-bold tracking-tight text-left">
             {question.key}
           </div>
           {question.value.map((option, optionIndex) => (
             <div className="">
-              <div name="options" className="">
+              <div about="options" className="">
                 <div className={`my-2 rounded-lg p-2 bg-vueGreen sm:hover:bg-vueBlue sm:hover:bg-opacity-30 ${result[questionIndex][optionIndex] ? 'bg-vueBlue bg-opacity-50' : 'bg-vueBlue bg-opacity-20'}`}>
                   <label
                     htmlFor={`${questionIndex}${optionIndex}-checkbox`}
@@ -185,8 +179,8 @@ export default function UI() {
           ))}
         </div>
       ))}
-      <div name='bottom' className="mb-[-1.5rem] grid grid-cols-5 justify-center items-center text-sm">
-        <div name="back" className="flex col-span-1 justify-start">
+      <div about='bottom' className="mb-[-1.5rem] grid grid-cols-5 justify-center items-center text-sm">
+        <div about="back" className="flex col-span-1 justify-start">
           <button
             className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2] bg-opacity-60 hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`}
             onClick={handleBack}
@@ -196,7 +190,7 @@ export default function UI() {
 
         </div>
 
-        <div name="progress-bar" className="w-full col-span-3">
+        <div about="progress-bar" className="w-full col-span-3">
           <div
             className="h-2 transition-width duration-500"
             style={{
@@ -234,7 +228,7 @@ export default function UI() {
           }
         </div>
       </div>
-      <div name="taken" className='col-span-5'>
+      <div about="taken" className='col-span-5'>
         {questionDone}/5 taken
       </div>
       <div className="border-t py-3"></div>
@@ -249,7 +243,7 @@ export default function UI() {
     </div>
 
   const chart =
-    <div name="chart" className="grid grid-cols-5 items-center justify-center">
+    <div about="chart" className="grid grid-cols-5 items-center justify-center">
       <Radar data={data} options={options} />
     </div>
 
@@ -271,7 +265,6 @@ export default function UI() {
             <button
               onClick={() => handleDialog(true)}
               className='w-[6rem] h-[2rem] rounded-lg justify-center items-center bg-middlegreen hover:bg-gradient-to-br  text-white'
-              variant="contained"
             >
               Yes
             </button>
@@ -283,14 +276,14 @@ export default function UI() {
       </div>
 
       <BrowserView>
-        <div name="intro" className="flex flex-col text-justify">
+        <div about="intro" className="flex flex-col text-justify">
           {!retaken &&
             <div className="grid grid-cols-2 items-center justify-center">
-              <div name="col-1" className="col-span-2 sm:col-span-1">
-                <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={500} height={0} />
+              <div about="col-1" className="col-span-2 sm:col-span-1">
+                <Image about="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={500} height={0} />
               </div>
 
-              <div name="col-2">
+              <div about="col-2">
                 {
                   <div className="col-span-2 sm:col-span-1text-justify text-lg mt-6 leading-8">
                     Welcome to a self-evaluation quiz designed to assess your familiarity with Scrum.
@@ -309,7 +302,7 @@ export default function UI() {
 
                   </div>}
                 {!finished && !retaken &&
-                  <div name='buttons' className='grid grid-cols-5 font-[500]'>
+                  <div about='buttons' className='grid grid-cols-5 font-[500]'>
                     <div className="col-span-3 flex justify-start">
                       {!reviewed &&
                         <button
@@ -354,7 +347,7 @@ export default function UI() {
         </div>
 
         {started &&
-          <div name="quiz" className="py-4 flex flex-col items-center">
+          <div about="quiz" className="py-4 flex flex-col items-center">
             {!finished && question}
 
           </div>
@@ -364,7 +357,7 @@ export default function UI() {
       </BrowserView>
 
       <MobileView className='text-gray-500 text-sm'>
-        <div name="intro" className="flex flex-col justify-center">
+        <div about="intro" className="flex flex-col justify-center">
           {!reviewed ?
             <div className="">
               {!finished && !retaken && <p className="text-justify text-lg mt-6 leading-8">
@@ -374,7 +367,7 @@ export default function UI() {
             </div>
             :
             <div className="flex flex-col justify-center items-center">
-              <Image name="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={300} height={0} />
+              <Image about="scrum" src="/assets/images/scrumpillars.svg" alt="scrum pillars" width={300} height={0} />
               <p className="text-left leading-8">
                 Scrum is an empirical framework for iterative software development:
                 <ul className="list-disc ml-4">
@@ -386,7 +379,7 @@ export default function UI() {
             </div>}
 
           {!finished && !retaken &&
-            <div name='buttons' className='grid grid-cols-5 font-[500]'>
+            <div about='buttons' className='grid grid-cols-5 font-[500]'>
               <div className="col-span-3 flex justify-start">
                 {!reviewed &&
                   <button

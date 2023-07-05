@@ -11,6 +11,7 @@ export default function sendConfirmMail(receiver: string, token: string) {
 
   const activationURL = `$/api/activate/${token}`;
 
+
   console.log("Activation URL", activationURL);
 
   // const mailOptions = {
