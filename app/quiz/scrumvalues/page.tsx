@@ -6,9 +6,6 @@ import questions from '@models/questions'
 import { AiOutlineRight, AiOutlineLeft, AiOutlineCheck, AiOutlineHome } from 'react-icons/ai'
 import axios from 'axios'
 
-interface ScrumvaluesProps {
-  user: string;
-}
 
 export default function Scrumvalues({ user }: ScrumvaluesProps) {
 
