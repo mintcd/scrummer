@@ -2,5 +2,11 @@ type UserInfo = {
   username: string;
   email: string;
   password: string;
-  isActive: boolean;
+  isActivated: boolean = false
+  cookie: string = null;
 };
+
+type ServerResponse = {
+  message: string;
+  status: number;
+}

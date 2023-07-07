@@ -5,16 +5,15 @@ export async function POST(req: NextRequest) {
   try {
     if (req.method === "POST") {
       const userInfo: UserInfo = await req.json();
-      console.log("Received user info:", userInfo);
+      const host = req.nextUrl.host
 
-      addUser(userInfo);
+      await addUser(host, userInfo);
 
-      return NextResponse.json({ message: "Received data successfully!" });
+      return NextResponse.json({ message: `Signed up successfully!`, status: 200 });
     } else {
-      return NextResponse.json({ message: "Method Not Allowed", status: 405 });
+      return NextResponse.json({ message: "Sethod Not Allowed", status: 405 });
     }
   } catch (error) {
-    console.error("Internal server error:", error);
-    return NextResponse.json({ message: "Internal Server Error", status: 500 });
+    return NextResponse.json({ message: error, status: 500 });
   }
 }

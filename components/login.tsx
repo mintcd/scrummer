@@ -6,7 +6,6 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/
 export default function Login() {
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-
   const [signinInfo, setSigninInfo] = useState({
     usernameOrEmail: '',
     password: '',
@@ -46,27 +45,29 @@ export default function Login() {
     setOpen(true)
   }
 
-  function handleConfirmSignup(bool: Boolean, e: React.FormEvent) {
+  async function handleConfirmSignup(bool: Boolean, e: React.FormEvent) {
     if (bool) {
-      fetch("/api/signup", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(signupInfo)
-      })
-        .then(response => {
-          console.log(response.json())
-        }
-        )
-        .catch(error => {
-          console.error('Error fetching data:', error);
+      try {
+        const response = await fetch("/api/signup", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(signupInfo)
         });
-      setOpen(false)
-    }
-    else setOpen(false)
 
+        const data = await response.json();
+        console.log(data);
+        if (data.status === 200) setSignuped(true)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    else {
+      setOpen(false);
+    }
   }
+
 
 
   return (
@@ -163,6 +164,7 @@ export default function Login() {
                 value={signupInfo.password}
               />
             </DialogContent>
+            {signuped && <div className='text-sm'> Signup completed. Please check email to activate your account. </div>}
             <DialogActions className='w-full'>
               <button
                 type="button"
