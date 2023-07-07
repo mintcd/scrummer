@@ -6,7 +6,11 @@ import questions from '@models/questions'
 import { AiOutlineRight, AiOutlineLeft, AiOutlineCheck, AiOutlineHome } from 'react-icons/ai'
 import axios from 'axios'
 
-export default function Scrumvalues({ user }) {
+interface ScrumvaluesProps {
+  user: string;
+}
+
+export default function Scrumvalues({ user }: ScrumvaluesProps) {
 
   // Hooks
   const [questionNumber, setQuestionNumber] = useState(0)
@@ -164,12 +168,6 @@ export default function Scrumvalues({ user }) {
       {submitted &&
         <div className='flex-grow pt-8 text-lg'> Your submission has been recorded, thank you! </div>
       }
-
-
-
-
     </div>
-
-
   )
 }
