@@ -1,5 +1,5 @@
 
-import ScrumValues from '@app/quiz/scrumvalues/page'
+import ScrumValues from '@components/quiz'
 export default function Homepage({ user }) {
   return (
     <div>
