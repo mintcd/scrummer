@@ -10,3 +10,7 @@ type ServerResponse = {
   message: string;
   status: number;
 }
+
+interface ScrumvaluesProps {
+  user: string;
+}
