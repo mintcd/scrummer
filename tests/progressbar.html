@@ -1,0 +1,30 @@
+<div about='bottom' className="mb-[-1.5rem] grid grid-cols-5 justify-center items-center text-sm">
+  <div about="back" className="flex col-span-1 justify-start">
+    <button name="right" className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2]
+      hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`} onClick={handleBack}>
+      <AiOutlineLeft width={10} height={10} />
+    </button>
+
+  </div>
+
+  <div about="progress-bar" className="col-span-3 h-2 bg-vueGreen transition-width duration-500" style={{ width:
+    `${(questionNumber + 1) * 20}%`, backgroundColor: 'rgba(66, 211, 146, 0.5)' , }}>
+  </div>
+
+  <div className="flex col-span-1 justify-end">
+    {questionNumber < 4 ? <button name="next" className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2]
+      hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`} onClick={handleNext}>
+      <AiOutlineRight />
+      </button>
+      :
+      <button name="finish" className={`my-4 w-10 h-10 text-white text-xl justify-center bg-[#56a2d2]
+        hover:bg-gradient-to-br font-[600] rounded-full inline-flex items-center`} onClick={handleFinish}>
+        <AiOutlineCheck />
+      </button>
+
+      }
+  </div>
+</div>
+<div about="taken" className='col-span-5'>
+  Question {questionNumber + 1}/5
+</div>

@@ -8,7 +8,7 @@ import Homepage from '@components/homepage';
 
 export default function Home() {
   const [verificationStatus, setVerificationStatus] = useState('loading');
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(Object());
 
   useEffect(() => {
     async function verifyUser() {
