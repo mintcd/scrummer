@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from 'react'
 import { AiOutlineBulb } from 'react-icons/ai'
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { getCookie, hasCookie, setCookie } from 'cookies-next';
 
 export default function Login() {
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -19,7 +19,8 @@ export default function Login() {
 
   const [signuped, setSignuped] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const [existed, setExisted] = useState(false);
+  const [nonexisted, setNonexisted] = useState(false);
 
   function handleChangeSignin(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -37,8 +38,30 @@ export default function Login() {
     }));
   }
 
-  function handleConfirmSignin() {
-    console.log(signinInfo)
+  async function handleConfirmSignin() {
+    try {
+      const response = await fetch('/api/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(signinInfo)
+      });
+
+      if (response.status === 401) setNonexisted(true)
+      if (response.status === 200) {
+        const data = await response.json();
+        setCookie('auth', data.cookie, {
+          maxAge: 604800,
+          path: '/',
+          secure: false, // Set to true for HTTPS-only cookie
+        });
+        window.location.href = '/'
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleSignup() {
@@ -48,7 +71,7 @@ export default function Login() {
   async function handleConfirmSignup(bool: Boolean, e: React.FormEvent) {
     if (bool) {
       try {
-        const response = await fetch("/api/signup", {
+        const response = await fetch('/api/signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -56,19 +79,21 @@ export default function Login() {
           body: JSON.stringify(signupInfo)
         });
 
-        const data = await response.json();
-        console.log(data);
-        if (data.status === 200) setSignuped(true)
+        if (response.status === 409) setExisted(true)
+        if (response.status === 200) {
+          setExisted(false)
+          setSignuped(true)
+        }
+
+
       } catch (error) {
         console.error(error);
       }
-    }
-    else {
+    } else {
       setOpen(false);
     }
+
   }
-
-
 
   return (
     <div className="my-32 grid grid-cols-2 justify-center text-gray-600 text-center">
@@ -164,7 +189,8 @@ export default function Login() {
                 value={signupInfo.password}
               />
             </DialogContent>
-            {signuped && <div className='text-sm'> Signup completed. Please check email to activate your account. </div>}
+            {existed && <div className='text-sm'> User existed. </div>}
+            {signuped && <div className='text-sm'> Signup completed. Please signin. </div>}
             <DialogActions className='w-full'>
               <button
                 type="button"
@@ -176,8 +202,6 @@ export default function Login() {
             </DialogActions>
           </form>
         </Dialog>
-
-
       </div>
     </div>
   );

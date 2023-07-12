@@ -7,7 +7,7 @@ import { AiOutlineRight, AiOutlineLeft, AiOutlineCheck, AiOutlineHome } from 're
 import axios from 'axios'
 
 
-export default function Scrumvalues({ user }: ScrumvaluesProps) {
+export default function Scrumvalues() {
 
   // Hooks
   const [questionNumber, setQuestionNumber] = useState(0)
@@ -79,7 +79,6 @@ export default function Scrumvalues({ user }: ScrumvaluesProps) {
 
       {!submitted &&
         <div>
-          <div className='flex-grow pt-8 text-lg'> Homepage is being developed... <br /> Please spend a minute redoing the quiz. </div>
           <div about='quiz'>
             {questions.map((question, questionIndex) => (
               questionNumber === questionIndex &&

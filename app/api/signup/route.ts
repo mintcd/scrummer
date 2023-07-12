@@ -1,19 +1,26 @@
-import { NextRequest, NextResponse } from "next/server"
-import { addUser } from "@controllers/database";
+import connect from "@controllers/database";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
+  const userInfo: signupInfo = await req.json();
+  const collection = connect().collection("user");
+
+  let user = {
+    ...userInfo,
+    cookie: null
+  };
+
   try {
-    if (req.method === "POST") {
-      const userInfo: UserInfo = await req.json();
-      const host = req.nextUrl.host
+    const res = await collection.findOne({ $or: [{ username: user.username }, { email: user.email }] });
 
-      await addUser(host, userInfo);
-
-      return NextResponse.json({ message: `Signed up successfully!`, status: 200 });
+    if (res) {
+      return new Response(JSON.stringify({ error: "User already exists" }), { status: 409 });
     } else {
-      return NextResponse.json({ message: "Sethod Not Allowed", status: 405 });
+      await collection.insertOne(user);
+      return new Response(JSON.stringify({ message: "Signed up successfully" }), { status: 200 });
     }
-  } catch (error) {
-    return NextResponse.json({ message: error, status: 500 });
+  } catch (err) {
+    console.log(err);
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
   }
 }
+

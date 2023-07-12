@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 
-export default function UINavigation() {
+export default function Nav() {
   return (
     <div className='flex flex-col items-center pt-1 pb-6'>
       <p className='py-2'> Visit other UIs </p>

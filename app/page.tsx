@@ -10,8 +10,6 @@ export default function Home() {
   const [verificationStatus, setVerificationStatus] = useState('loading');
   const [user, setUser] = useState("");
 
-
-
   useEffect(() => {
     async function verifyUser() {
       const cookieValue = getCookie('auth')
@@ -23,6 +21,7 @@ export default function Home() {
           });
 
           if (response.status === 200) {
+            console.log(user)
             setUser(response.data.user);
             console.log("Verified", response.data.user)
             setVerificationStatus('verified');
@@ -37,16 +36,13 @@ export default function Home() {
         setVerificationStatus('unverified');
       }
     }
-
     verifyUser();
   }, []);
 
   return (
     <div>
       {verificationStatus === 'loading' && <div> Imagine it is a loading spinner... </div>}
-      {verificationStatus === 'verified' &&
-        <Homepage user={user} />
-      }
+      {verificationStatus === 'verified' && <Homepage user={user} />}
       {verificationStatus === 'unverified' && <Login />}
       {verificationStatus === 'error' && <div>Error verifying user.</div>}
     </div>

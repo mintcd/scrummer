@@ -1,15 +1,20 @@
-type UserInfo = {
+type signinInfo = {
+  usernameOrEmail: string;
+  password: string;
+  cookie: string;
+};
+
+type signupInfo = {
   username: string;
   email: string;
   password: string;
-  isActivated: boolean = false
-  cookie: string = null;
 };
 
-type ServerResponse = {
-  message: string;
+type FunctionResponse = {
   status: number;
+  message: string;
 }
+
 
 interface ScrumvaluesProps {
   user: string;
