@@ -7,7 +7,7 @@ import { AiOutlineRight, AiOutlineLeft, AiOutlineCheck, AiOutlineHome } from 're
 import axios from 'axios'
 
 
-export default function Scrumvalues() {
+export default function Scrumvalues({ user }) {
 
   // Hooks
   const [questionNumber, setQuestionNumber] = useState(0)
