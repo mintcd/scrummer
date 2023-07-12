@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <div>
-      {verificationStatus === 'loading' && <div> Imagine it is a loading spinner... </div>}
+      {verificationStatus === 'loading' && <div> Loading... </div>}
       {verificationStatus === 'verified' && <Homepage user={user} />}
       {verificationStatus === 'unverified' && <Login />}
       {verificationStatus === 'error' && <div>Error verifying user.</div>}
