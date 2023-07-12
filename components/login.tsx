@@ -118,8 +118,8 @@ export default function Login() {
   }
 
   return (
-    <div className="my-32 grid grid-cols-2 justify-center text-gray-600 text-center">
-      <div className="mr-8">
+    <div className="my-32 grid grid-cols-2 justify-center items-center text-gray-600 text-center">
+      <div className="sm:mr-8 col-span-2 sm:col-span-1">
         <div className="mt-32 h-16 font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-vueGreen to-vueBlue">
           Scrummer
         </div>
@@ -135,7 +135,7 @@ export default function Login() {
           </span>
         </a>
       </div>
-      <div className="w-full ml-8 max-w-sm mt-32">
+      <div className="w-full sm:ml-8 max-w-sm mt-32 col-span-2 sm:col-span-1">
         <div about="signin">
           <div about="inputs">
             <input
@@ -174,9 +174,8 @@ export default function Login() {
         </div>
 
         <Dialog className="" open={open}
-          onClose={(reason: "backdropClick" | "escapeKeyDown") => setOpen(false)}
-        >
-          <DialogTitle > Sign up </DialogTitle>
+          onClose={(reason: "backdropClick" | "escapeKeyDown") => setOpen(false)}>
+          <DialogTitle> Sign up </DialogTitle>
           <form className="flex flex-col justify-center items-center">
             <DialogContent dividers>
               <input
@@ -213,8 +212,10 @@ export default function Login() {
             <DialogActions className='w-full'>
               <button
                 type="button"
-                className="py-2 rounded px-4 w-full shadow bg-[#56a2d2] hover:opacity-50 focus:shadow-outline focus:outline-none text-white font-bold "
+                className={`py-2 rounded px-4 w-full shadow hover:opacity-50 focus:shadow-outline focus:outline-none text-white font-bold
+                ${(signupInfo.password === '' || signupInfo.email === '' || signupInfo.username === '') ? 'bg-gray-200' : 'bg-[#56a2d2]'}`}
                 onClick={handleConfirmSignup}
+                disabled={signupInfo.password === '' || signupInfo.email === '' || signupInfo.username === ''}
               >
                 Confirm
               </button>

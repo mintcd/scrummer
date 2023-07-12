@@ -10,5 +10,6 @@ export default function Homepage({ user }) {
       </div>
       <ScrumValues username={user.username} />
     </div>
+
   )
 }

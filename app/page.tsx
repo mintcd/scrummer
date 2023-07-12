@@ -43,8 +43,7 @@ export default function Home() {
     <div>
       {verificationStatus === 'loading' && <div> Loading... </div>}
       {verificationStatus === 'verified' && <Homepage user={user} />}
-      {verificationStatus === 'unverified' && <Login />}
-      {verificationStatus === 'error' && <div>Error verifying user.</div>}
+      {(verificationStatus === 'unverified' || verificationStatus === 'error') && <Login />}
     </div>
   );
 }
