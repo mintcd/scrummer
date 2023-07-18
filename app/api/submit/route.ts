@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       const collection = connect().collection('session')
       await collection.insertOne({ ...session, time: new Date })
 
-      return NextResponse.json("OK");
+      return NextResponse.json({ message: "Submitted" });
     }
   } catch (error) {
     return NextResponse.json(error);

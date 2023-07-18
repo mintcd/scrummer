@@ -1,10 +1,19 @@
 import { useState, ChangeEvent } from 'react'
 import { AiOutlineBulb } from 'react-icons/ai'
 import { Dialog, DialogTitle, DialogContent, DialogActions, dividerClasses } from '@mui/material';
-import { getCookie, hasCookie, setCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 import { isEmail, containsSpecialCharacters } from '@controllers/helpers';
+import axios from 'axios'
+import { TIMEOUT } from 'dns';
 
 export default function Login() {
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      // Perform your action here
+      console.log('Enter key pressed!');
+    }
+  };
 
   const [signinInfo, setSigninInfo] = useState({
     usernameOrEmail: '',
@@ -20,9 +29,6 @@ export default function Login() {
   const [open, setOpen] = useState(false);
 
   const [error, setError] = useState({ existed: false, nonexisted: false, notEmail: false, containsSpecialCharacters: false });
-
-  const [existed, setExisted] = useState(false);
-  const [nonexisted, setNonexisted] = useState(false);
 
   function handleChangeSignin(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -41,29 +47,22 @@ export default function Login() {
   }
 
   async function handleConfirmSignin() {
-    try {
-      const response = await fetch('/api/validate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(signinInfo)
-      });
-
-      if (response.status === 401) setNonexisted(true)
-      if (response.status === 200) {
-        const data = await response.json();
-        setCookie('auth', data.cookie, {
-          maxAge: 604800,
-          path: '/',
-          secure: false,
-        });
-        window.location.href = '/'
-      }
-
-    } catch (error) {
-      console.error(error);
-    }
+    axios.post('/api/validate', signinInfo)
+      .then(async (res) => {
+        console.log(res.status)
+        if (res.data.status === 401) {
+          setError((args) => ({ ...args, nonexisted: true }))
+          console.log(error.nonexisted)
+        }
+        else if (res.data.status === 200) {
+          setCookie('auth', res.data.cookie, {
+            maxAge: 604800,
+            path: '/',
+            secure: false,
+          });
+          window.location.href = '/'
+        }
+      })
   }
 
   function handleSignup() {
@@ -109,8 +108,11 @@ export default function Login() {
           containsSpecialCharacters: false,
           existed: false,
         }));
-
         setSignuped(true)
+        setTimeout(() => {
+          window.location.href = '/'
+        }, 2000)
+
       }
     } catch (error) {
       console.error(error);
@@ -124,7 +126,7 @@ export default function Login() {
           Scrummer
         </div>
         <div className="my-8 text-xl">
-          Your assistant to learn Scrum and master applying in work.
+          Work more efficiently with your Scrum learning asisstant.
         </div>
         <a href="https://scrumguides.org/" target="_blank" rel="noopener noreferrer" className='text-center'>
           <span>
@@ -152,9 +154,12 @@ export default function Login() {
               type="password"
               name="password" // Updated name here
               onChange={(e) => handleChangeSignin(e)}
+              onKeyDown={handleConfirmSignin}
               placeholder="Password"
               value={signinInfo.password}
             />
+            {error.nonexisted && <div className='text-sm text-red-500 text-left'> Some input field is invalid </div>}
+
           </div>
           <div id="buttons" className='flex justify-end'>
             <button

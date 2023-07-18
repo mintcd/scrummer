@@ -15,12 +15,9 @@ export async function POST(req: NextRequest) {
     ? await users.findOne({ email: user.usernameOrEmail, password: user.password })
     : await users.findOne({ username: user.usernameOrEmail, password: user.password })
 
-  if (!result) return new Response(JSON.stringify({ error: "Email or username invalid" }), { status: 401 });
+  if (!result) return NextResponse.json({ status: 401, error: 'Email or username invalid' }, { status: 200 })
   else {
     const cookie = generateCookie(32)
-    console.log("user", user)
-    console.log("Generated cookie", cookie);
-
     try {
       const updateResult = isemail
         ? await users.updateOne(
@@ -37,13 +34,12 @@ export async function POST(req: NextRequest) {
       } else {
         console.log('No documents matched the update criteria');
       }
+
+      return NextResponse.json({ status: 200, message: 'Signin', cookie: cookie }, { status: 200 })
     } catch (error) {
       console.error('Error occurred during update:', error);
     }
-    return new Response(
-      JSON.stringify({ message: "Signed in", cookie: cookie }),
-      { status: 200 }
-    );
+
   }
 }
 
